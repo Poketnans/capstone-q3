@@ -4,16 +4,17 @@ from dataclasses import dataclass
 from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
 
+
 @dataclass
-class MaterialsModel(db.Model):
-    
+class Material(db.Model):
+
     id: str
     id_order: str
     id_product: str
     quantity: int
-    
-    __tablename__ = "clients"
-    
+
+    __tablename__ = "materials"
+
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     id_order = Column(UUID(as_uuid=True), ForeignKey("orders.id"))
     id_product = Column(UUID(as_uuid=True), ForeignKey("products.id"))
