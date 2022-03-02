@@ -5,7 +5,7 @@ from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
 
 @dataclass
-class Client(db.Model):
+class ClientModel(db.Model):
     
     id: str
     name: str

@@ -5,7 +5,7 @@ from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
 
 @dataclass    
-class Events(db.Model):
+class EventsModel(db.Model):
     
     id: str
     date: str

@@ -5,7 +5,7 @@ from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
 
 @dataclass    
-class Tattoos(db.Model):
+class TattoosModel(db.Model):
     
     id: str
     size: str

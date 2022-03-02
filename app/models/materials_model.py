@@ -5,7 +5,7 @@ from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
 
 @dataclass
-class Materials(db.Model):
+class MaterialsModel(db.Model):
     
     id: str
     id_order: str
