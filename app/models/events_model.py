@@ -15,7 +15,7 @@ class Event(db.Model):
     start: str
     end: str
     finished: bool
-    final_image: str
+    # final_image: str
 
     __tablename__ = "events"
 
@@ -24,4 +24,4 @@ class Event(db.Model):
     start = Column(DateTime)
     end = Column(DateTime)
     finished = Column(Boolean)
-    final_image = Column(LargeBinary)
+    # final_image = Column(LargeBinary)

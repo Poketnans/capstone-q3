@@ -34,4 +34,4 @@ class Client(db.Model):
     street = Column(String, nullable=False)
     number = Column(Integer, nullable=False)
     city = Column(String, nullable=False)
-    image = Column(LargeBinary)
+    # image = Column(LargeBinary)
