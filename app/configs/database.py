@@ -14,13 +14,5 @@ def init_app(app: AppWithDb) -> None:
     app.db = db
 
     # Model imports
-    from app.models import (
-        Client,
-        Tattooist,
-        Event,
-        Product,
-        Tattoo,
-        # TattooImage,
-        orders,
-        Material
-    )
+    from app.models import (Client, Event, Material, Product,  # TattooImage,
+                            Tattoo, Tattooist, orders)

@@ -1,7 +1,9 @@
-from app.configs.database import db
-from sqlalchemy import Column, ForeignKey
 from uuid import uuid4
+
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
+
+from app.configs.database import db
 
 orders = db.Table('orders',
                   Column('id', UUID(as_uuid=True),
