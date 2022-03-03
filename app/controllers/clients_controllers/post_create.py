@@ -1,11 +1,12 @@
 from http import HTTPStatus
 
-from flask import current_app, jsonify, request
+from flask import jsonify, request
 from psycopg2.errors import UniqueViolation
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import BadRequest
 
 from app.models.clients_model import Client
+from app.classes.app_with_db import current_app
 from app.services.payload_eval import payload_eval
 
 
@@ -19,7 +20,7 @@ def post_create():
             'email': str,
             'birth_date': str,
             'phone': str,
-            'password_hash': str,
+            'password': str,
             'disclaimer': bool,
             'street': str,
             'number': int,
@@ -40,8 +41,5 @@ def post_create():
     except BadRequest as err:
         return jsonify(err.description), err.code
 
-    except TypeError as err:
-        return {"error key": f"key invalid {err}"}, HTTPStatus.BAD_REQUEST
     
-
     return jsonify(new_client), HTTPStatus.CREATED

@@ -5,6 +5,7 @@ from app.configs.database import db
 from dataclasses import dataclass
 from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 @dataclass
@@ -35,3 +36,15 @@ class Client(db.Model):
     number = Column(Integer, nullable=False)
     city = Column(String, nullable=False)
     # image = Column(LargeBinary)
+
+    @property
+    def password(self):
+        raise AttributeError('password canot be accessed')
+
+    @password.setter
+    def password(self, password_to_hash):
+        self.password_hash = generate_password_hash(password_to_hash)
+
+    def verify_password(self, password_to_compare):
+        return check_password_hash(self.password_hash, password_to_compare)
+    
