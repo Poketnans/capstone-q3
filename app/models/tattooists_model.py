@@ -34,6 +34,6 @@ class Tattooist(db.Model):
         return self.url_image
     
     @url_image.getter
-    def url_image(self, text = "http://localhost:5000/tattooists/profile_pricture/"):
+    def url_image(self, text = "http://localhost:5000/tattooists/profile_image/"):
         url = f"{text}{self.image_name}"
         return url    
