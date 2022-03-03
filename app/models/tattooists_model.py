@@ -15,6 +15,9 @@ class Tattooist(db.Model):
     email: str
     general_information: str
     admin: str
+    image_name: str
+    image_bin: str
+    image_mimetype: str
 
     __tablename__ = "tattooists"
 
@@ -22,6 +25,10 @@ class Tattooist(db.Model):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
     password_hash = Column(String, nullable=False, unique=True)
-    # image = Column(LargeBinary, nullable=False)
     general_information = Column(Text)
     admin = Column(Boolean)
+    image_name = Column(String)
+    image_bin = Column(LargeBinary)
+    image_mimetype = Column(String)
+    
+    
