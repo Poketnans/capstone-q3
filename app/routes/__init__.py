@@ -1,6 +1,5 @@
 from flask import Flask
 
-from .clients_blueprint import bp_clients
 from .orders_blueprint import bp_orders
 from .products_blueprint import bp_products
 from .tattooists_blueprint import bp_tattooists
