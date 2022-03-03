@@ -5,7 +5,7 @@ from app.configs.database import db
 from dataclasses import dataclass
 from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 
 
 @dataclass
@@ -30,3 +30,11 @@ class Tattoo(db.Model):
     id_session = Column(UUID(as_uuid=True), ForeignKey("sessions.id"))
 
     image_models = relationship("TattooImage", uselist=True)
+
+    client = relationship("Client", backref=backref(
+        "tattoos", uselist=True), uselist=False)
+
+    tattooist = relationship("Tattooist", backref=backref(
+        "tattoos", uselist=True), uselist=False)
+
+    tattoo_schedule = relationship("Session", uselist=False)
