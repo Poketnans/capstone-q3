@@ -38,3 +38,4 @@ class Tattoo(db.Model):
         "tattoos", uselist=True), uselist=False)
 
     tattoo_schedule = relationship("Session", uselist=False)
+    materials = relationship("Material", uselist=True)
