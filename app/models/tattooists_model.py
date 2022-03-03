@@ -15,9 +15,6 @@ class Tattooist(db.Model):
     email: str
     general_information: str
     admin: str
-    image_name: str
-    image_bin: str
-    image_mimetype: str
 
     __tablename__ = "tattooists"
 
