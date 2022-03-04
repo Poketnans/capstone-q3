@@ -1,7 +1,7 @@
 from sqlalchemy import (
     Column, String, Integer, Text, Boolean, Date, LargeBinary
 )
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from app.configs.database import db
 from dataclasses import dataclass
 from uuid import uuid4
@@ -42,7 +42,7 @@ class Client(db.Model):
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
     
-    tattoos = relationship("Tattoo", backref="clients", uselist=False)
+    tattoos = relationship("Tattoo", backref=backref("client", uselist=False), uselist=True)
     
     @property
     def url_image(self):
