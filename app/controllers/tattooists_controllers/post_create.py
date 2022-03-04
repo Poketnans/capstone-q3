@@ -59,5 +59,3 @@ def post_create():
         return jsonify(e.description), e.code
     except JSONNotFound as e:
         return {"error": f"{e.describe}"}, e.status_code
-    except Exception as e:
-        raise e
