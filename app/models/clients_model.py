@@ -1,10 +1,11 @@
-from sqlalchemy import (
-    Column, String, Integer, Text, Boolean, Date, LargeBinary
-)
-from app.configs.database import db
 from dataclasses import dataclass
 from uuid import uuid4
+
+from sqlalchemy import (Boolean, Column, Date, Integer, LargeBinary, String,
+                        Text)
 from sqlalchemy.dialects.postgresql import UUID
+
+from app.configs.database import db
 
 
 @dataclass
