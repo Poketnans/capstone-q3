@@ -1,5 +1,6 @@
 import os
 from datetime import timedelta
+from flask_httpauth import HTTPTokenAuth
 
 
 class Config:
