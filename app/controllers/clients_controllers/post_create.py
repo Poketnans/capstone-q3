@@ -3,14 +3,11 @@ from http import HTTPStatus
 from flask import jsonify, request
 from psycopg2.errors import UniqueViolation
 from sqlalchemy.exc import IntegrityError
-from werkzeug.exceptions import BadRequest
 
 from app.models.clients_model import Client
 from app.classes.app_with_db import current_app
 from app.services.payload_eval import payload_eval
-from app.errors.data_already_exists_error import DataAlreadyExistsError
-from app.errors.bad_requisition import BadRequisiton
-
+from app.errors import InvalidValueTypesError , FieldMissingError
 
 def post_create():
     session = current_app.db.session
@@ -37,10 +34,13 @@ def post_create():
 
     except IntegrityError as error:
         if isinstance(error.orig, UniqueViolation):
-            return jsonify(DataAlreadyExistsError.description), HTTPStatus.CONFLICT
+            msg = {"error_message": "key value already registered"}
+            return jsonify(msg), HTTPStatus.CONFLICT
     
-    except BadRequest:
-        return BadRequisiton
+    except FieldMissingError as err:
+        return jsonify(err.description),err.code
 
+    except InvalidValueTypesError as err:
+        return jsonify(err.description),err.code
     
     return jsonify(new_client), HTTPStatus.CREATED
