@@ -33,4 +33,3 @@ def post_login():
         return e.description, HTTPStatus.NOT_FOUND
     except FieldMissingError as e:
         return e.description, HTTPStatus.BAD_REQUEST
-    
