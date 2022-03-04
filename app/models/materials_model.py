@@ -11,13 +11,13 @@ from app.configs.database import db
 class Material(db.Model):
 
     id: str
-    id_product: str
+    id_storage: str
     id_tattoo: str
     quantity: int
 
     __tablename__ = "materials"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    id_product = Column(UUID(as_uuid=True), ForeignKey("products.id"))
+    id_storage = Column(UUID(as_uuid=True), ForeignKey("storage.id"))
     id_tattoo = Column(UUID(as_uuid=True), ForeignKey("tattoos.id"))
     quantity = Column(Integer)

@@ -8,7 +8,7 @@ from app.configs.database import db
 
 
 @dataclass
-class Product(db.Model):
+class Storage(db.Model):
 
     id: str
     name: str
@@ -16,7 +16,7 @@ class Product(db.Model):
     description: str
     validity: str
 
-    __tablename__ = "products"
+    __tablename__ = "storage"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     name = Column(String, nullable=False)
