@@ -39,11 +39,12 @@ def post_create():
 
         new_tatooist = Tattooist(**data)
 
-        file = get_files()
-        if file:
-            new_tatooist.image_bin = file.file_bin
-            new_tatooist.image_name = file.filename
-            new_tatooist.image_mimetype = file.mimetype
+        files = get_files()
+        if files:
+            for file in files:
+                new_tatooist.image_bin = file.file_bin
+                new_tatooist.image_name = file.filename
+                new_tatooist.image_mimetype = file.mimetype
 
         session.add(new_tatooist)
         session.commit()
