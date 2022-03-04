@@ -15,7 +15,7 @@ def post_login():
     try:
         if data == None:
             raise FieldMissingError(description={"msg": "the body was empty"})
-        
+
         clean_data = payload_eval.payload_eval(
             data=data,
             email=str,
@@ -30,7 +30,7 @@ def post_login():
             return {"msg": "wrong password"}, HTTPStatus.FORBIDDEN
 
         token = create_access_token(
-            identity=user, expires_delta=Config.JWT_ACCESS_TOKEN_EXPIRES)
+            identity=user)
 
         return {"access token": token}
     except werkzeug.exceptions.NotFound as e:
