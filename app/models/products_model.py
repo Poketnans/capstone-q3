@@ -1,8 +1,10 @@
-from sqlalchemy import Column, String, Integer, Text, Date
-from app.configs.database import db
 from dataclasses import dataclass
 from uuid import uuid4
+
+from sqlalchemy import Column, Date, Integer, String, Text
 from sqlalchemy.dialects.postgresql import UUID
+
+from app.configs.database import db
 
 
 @dataclass

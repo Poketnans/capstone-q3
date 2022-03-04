@@ -1,11 +1,11 @@
-from sqlalchemy import (
-    Column, ForeignKey, String, Text, Boolean
-)
-from app.configs.database import db
 from dataclasses import dataclass
 from uuid import uuid4
+
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship, backref
+
+from app.configs.database import db
 
 
 @dataclass
