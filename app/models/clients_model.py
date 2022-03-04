@@ -8,7 +8,11 @@ from dataclasses import dataclass
 from uuid import uuid4
 
 from sqlalchemy.dialects.postgresql import UUID
+<<<<<<< HEAD
 from werkzeug.security import check_password_hash, generate_password_hash
+=======
+from werkzeug.security import generate_password_hash, check_password_hash
+>>>>>>> development
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -43,17 +47,15 @@ class Client(db.Model):
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
     
-    tattoos = relationship("Tattoo", backref=backref("Client", uselist=False), uselist=True)
-    
     @property
     def url_image(self):
         return self.url_image
-    
+
     @url_image.getter
-    def url_image(self, text = "http://localhost:5000/clients/profile_image/"):
+    def url_image(self, text="http://localhost:5000/clients/profile_image/"):
         url = f"{text}{self.image_name}"
         return url
-    
+
     @property
     def password(self):
         raise AttributeError('password cannot be accessed')
