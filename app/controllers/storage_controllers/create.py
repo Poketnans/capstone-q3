@@ -10,7 +10,7 @@ from app.models import Storage
 from app.classes.app_with_db import current_app
 
 
-# @jwt_required()
+@jwt_required()
 def create():
 
     payload = request.get_json()
