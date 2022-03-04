@@ -11,7 +11,11 @@ from app.errors import FieldMissingError
 
 def post_login():
     data = request.get_json()
+    # set_trace()
     try:
+        if data == None:
+            raise FieldMissingError(description={"msg": "the body was empty"})
+        
         clean_data = payload_eval.payload_eval(
             data=data,
             email=str,
