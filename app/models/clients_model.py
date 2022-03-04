@@ -21,7 +21,6 @@ class Client(db.Model):
     birth_date: str
     phone: str
     general_information: str
-    disclaimer: bool
     street: str
     number: int
     city: str
@@ -36,25 +35,25 @@ class Client(db.Model):
     password_hash = Column(String, nullable=False, unique=True)
     phone = Column(String, nullable=False, unique=True)
     general_information = Column(Text)
-    disclaimer = Column(Boolean)
     street = Column(String, nullable=False)
     number = Column(Integer, nullable=False)
     city = Column(String, nullable=False)
     image_name = Column(String)
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
-    
-    tattoos = relationship("Tattoo", backref=backref("client", uselist=False), uselist=True)
-    
+
+    tattoos = relationship("Tattoo", backref=backref(
+        "client", uselist=False), uselist=True)
+
     @property
     def url_image(self):
         return self.url_image
-    
+
     @url_image.getter
-    def url_image(self, text = "http://localhost:5000/clients/profile_image/"):
+    def url_image(self, text="http://localhost:5000/clients/profile_image/"):
         url = f"{text}{self.image_name}"
         return url
-    
+
     @property
     def password(self):
         raise AttributeError('password cannot be accessed')
