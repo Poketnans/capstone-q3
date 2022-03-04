@@ -42,8 +42,8 @@ class Client(db.Model):
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
 
-    tattoos = relationship("Tattoo", backref=backref(
-        "client", uselist=False), uselist=True)
+    # tattoos = relationship("Tattoo", backref=backref(
+    #    "client", uselist=False), uselist=True)
 
     @property
     def url_image(self):
