@@ -3,6 +3,7 @@ from uuid import uuid4
 
 from sqlalchemy import Boolean, Column, LargeBinary, String, Text
 from sqlalchemy.dialects.postgresql import UUID
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.configs.database import db
 
@@ -16,7 +17,7 @@ class Tattooist(db.Model):
     general_information: str
     admin: str
     url_image: str = None
-    
+
     __tablename__ = "tattooists"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
@@ -28,12 +29,23 @@ class Tattooist(db.Model):
     image_name = Column(String)
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
-    
+
     @property
     def url_image(self):
         return self.url_image
-    
+
     @url_image.getter
-    def url_image(self, text = "http://localhost:5000/tattooists/profile_image/"):
+    def url_image(self, text="http://localhost:5000/tattooists/profile_image/"):
         url = f"{text}{self.image_name}"
-        return url    
+        return url
+
+    @property
+    def password(self):
+        raise AttributeError('password cannot be accessed')
+
+    @password.setter
+    def password(self, password_to_hash):
+        self.password_hash = generate_password_hash(password_to_hash)
+
+    def verify_password(self, password_to_compare):
+        return check_password_hash(self.password_hash, password_to_compare)
