@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from uuid import uuid4
 
 from sqlalchemy.dialects.postgresql import UUID
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -41,10 +42,7 @@ class Client(db.Model):
     image_name = Column(String)
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
-
-    tattoos = relationship("Tattoo", backref=backref(
-        "client", uselist=False), uselist=True)
-
+    
     @property
     def url_image(self):
         return self.url_image

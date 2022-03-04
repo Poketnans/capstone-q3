@@ -30,9 +30,9 @@ class Tattoo(db.Model):
     id_session = Column(UUID(as_uuid=True), ForeignKey("sessions.id"))
 
     image_models = relationship("TattooImage", uselist=True)
-
-    # client = relationship("Client", backref=backref(
-    #    "tattoos", uselist=True), uselist=False)
+    
+    client = relationship("Client", backref=backref(
+        "Tattoo", uselist=True), uselist=False)
 
     tattooist = relationship("Tattooist", backref=backref(
         "tattoos", uselist=True), uselist=False)
