@@ -1,5 +1,6 @@
-from flask import request
 from json import loads
+
+from flask import request
 from werkzeug.utils import secure_filename
 
 from app.errors import JSONNotFound

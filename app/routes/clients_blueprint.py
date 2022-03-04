@@ -1,5 +1,7 @@
 from flask import Blueprint
-from app.controllers.clients_controllers import post_login, post_create, get_all, get_specific
+
+from app.controllers.clients_controllers import (get_all, get_specific,
+                                                 post_create, post_login)
 
 bp_clients = Blueprint("clients", __name__, url_prefix="/clients")
 bp_clients.post("/login")(post_login)

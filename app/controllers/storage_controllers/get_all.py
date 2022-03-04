@@ -1,6 +1,8 @@
-from app.models.storage_model import Storage
 from http import HTTPStatus
+
 from flask import jsonify
+
+from app.models.storage_model import Storage
 
 
 def get_all():

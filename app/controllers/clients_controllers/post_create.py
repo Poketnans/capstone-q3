@@ -4,10 +4,11 @@ from flask import jsonify, request
 from psycopg2.errors import UniqueViolation
 from sqlalchemy.exc import IntegrityError
 
-from app.models.clients_model import Client
 from app.classes.app_with_db import current_app
+from app.errors import FieldMissingError, InvalidValueTypesError
+from app.models.clients_model import Client
 from app.services.payload_eval import payload_eval
-from app.errors import InvalidValueTypesError , FieldMissingError
+
 
 def post_create():
     session = current_app.db.session

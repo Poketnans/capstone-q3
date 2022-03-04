@@ -1,13 +1,13 @@
 from http import HTTPStatus
-from flask import request, jsonify
+
+from flask import jsonify, request
 from flask_jwt_extended import jwt_required
 from sqlalchemy.exc import DataError
 
-
-from app.services.payload_eval import payload_eval
+from app.classes.app_with_db import current_app
 from app.errors import FieldMissingError, InvalidValueTypesError
 from app.models import Storage
-from app.classes.app_with_db import current_app
+from app.services.payload_eval import payload_eval
 
 
 @jwt_required()
