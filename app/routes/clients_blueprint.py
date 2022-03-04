@@ -1,5 +1,6 @@
 from flask import Blueprint
-from app.controllers.clients_controllers import post_login
+from app.controllers.clients_controllers import post_login, post_create
 
-bp_clients = Blueprint("login post", __name__, url_prefix="/clients")
+bp_clients = Blueprint("clients", __name__, url_prefix="/clients")
 bp_clients.post("/login")(post_login)
+bp_clients.post("")(post_create)
