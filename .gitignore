@@ -77,3 +77,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# DBeaver
+.dbeaver
+.project
