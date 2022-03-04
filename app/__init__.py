@@ -8,7 +8,7 @@ from app.configs import auth, config_selector, database, migrations
 def create_app() -> AppWithDb:
     app = AppWithDb(__name__)
 
-    config_type = os.getenv('FLASK_ENV')
+    config_type = os.getenv('FLASK_ENV', "production")
 
     app.config.from_object(config_selector[config_type])
 
