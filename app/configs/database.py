@@ -1,5 +1,3 @@
-import os
-
 from flask_sqlalchemy import SQLAlchemy
 
 from app.classes.app_with_db import AppWithDb
@@ -17,10 +15,9 @@ def init_app(app: AppWithDb) -> None:
     from app.models import (
         Client,
         Tattooist,
-        Event,
-        Product,
+        Storage,
+        Session,
         Tattoo,
-        # TattooImage,
-        orders,
+        TattooImage,
         Material
     )
