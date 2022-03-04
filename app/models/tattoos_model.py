@@ -32,7 +32,7 @@ class Tattoo(db.Model):
     image_models = relationship("TattooImage", uselist=True)
 
     client = relationship("Client", backref=backref(
-        "tattoos", uselist=True), uselist=False)
+        "Tattoo", uselist=True), uselist=False)
 
     tattooist = relationship("Tattooist", backref=backref(
         "tattoos", uselist=True), uselist=False)
