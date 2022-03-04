@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from ipdb import set_trace
+#from ipdb import set_trace
 from flask import request
 from flask_jwt_extended import create_access_token
 from app.models.clients_model import Client
