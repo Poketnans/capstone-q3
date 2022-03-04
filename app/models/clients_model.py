@@ -22,7 +22,6 @@ class Client(db.Model):
     birth_date: str
     phone: str
     general_information: str
-    disclaimer: bool
     street: str
     number: int
     city: str
@@ -37,7 +36,6 @@ class Client(db.Model):
     password_hash = Column(String, nullable=False, unique=True)
     phone = Column(String, nullable=False, unique=True)
     general_information = Column(Text)
-    disclaimer = Column(Boolean)
     street = Column(String, nullable=False)
     number = Column(Integer, nullable=False)
     city = Column(String, nullable=False)
@@ -45,7 +43,7 @@ class Client(db.Model):
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
     
-    tattoos = relationship("Tattoo", backref=backref("client", uselist=False), uselist=True)
+    tattoos = relationship("Tattoo", backref=backref("Client", uselist=False), uselist=True)
     
     @property
     def url_image(self):
