@@ -1,8 +1,10 @@
-from sqlalchemy import Column, Integer, ForeignKey
-from app.configs.database import db
 from dataclasses import dataclass
 from uuid import uuid4
+
+from sqlalchemy import Column, ForeignKey, Integer
 from sqlalchemy.dialects.postgresql import UUID
+
+from app.configs.database import db
 
 
 @dataclass
