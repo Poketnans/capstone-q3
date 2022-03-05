@@ -12,6 +12,7 @@ def get_specific(id_tattooist:str):
     tattoist = Tattooist.query.get(id_tattooist)
 
     if not tattoist:
-        return jsonify([]), HTTPStatus.OK
+        msg = {"error_message":  "Tattooist not found"}
+        return jsonify(msg), HTTPStatus.NOT_FOUND
 
     return jsonify(tattoist), HTTPStatus.OK
