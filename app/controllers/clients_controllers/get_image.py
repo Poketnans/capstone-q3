@@ -15,4 +15,4 @@ def get_image():
             raise NoResultFound
         return Response(client.image_bin, mimetype=client.image_mimetype), HTTPStatus.OK
     except NoResultFound:
-        return {"msg": "image not found"}, HTTPStatus.NOT_FOUND
+        return {"msg": "client not found"}, HTTPStatus.NOT_FOUND
