@@ -1,15 +1,20 @@
-from flask_jwt_extended import get_jwt_identity
-from sqlalchemy.orm.exc import NoResultFound
+from flask import current_app
+from flask_jwt_extended import get_jwt_identity, jwt_required
+
+from sqlalchemy.orm import Session
+from http import HTTPStatus
 
 from app.models import Client
 
 
+@jwt_required()
 def delete():
-    ...
-    try:
-        client_jwt = get_jwt_identity()
+    session: Session = current_app.db.session
+    client_jwt = get_jwt_identity()
 
-        client = Client.query.filter_by(id=client_jwt['id']).first()
+    client: Client = Client.query.filter_by(id=client_jwt['id']).first()
+    client.password_hash = ""
+    session.add(client)
+    session.commit()
 
-    except NoResultFound:
-        return {"error": ""}
+    return "", HTTPStatus.NO_CONTENT
