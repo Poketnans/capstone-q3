@@ -35,26 +35,6 @@ def get_data_with_images(exception: bool = True, key_form: str = "data") -> "dic
     return data
 
 
-"""def get_files() -> ImageFile:
-    ''' Função captura os arquivos de uma rota.
-        A captura é feita caso a rota seja com `Multipart-form` caso contrario retorna none.
-
-    '''
-
-    if request.files:
-        file = request.files["file"]
-        file_bin = file.read()
-        filename = secure_filename(file.filename)
-        mimetype = file.mimetype
-        image = ImageFile(**{
-            "file_bin": file_bin,
-            "filename": filename,
-            "mimetype": mimetype
-        })
-        return image
-    return None"""
-
-
 def get_files(limite=None) -> "list[ImageFile] or None":
     ''' Função captura os arquivos de uma rota.
         A captura é feita caso a rota seja com `Multipart-form` caso contrario retorna none.
