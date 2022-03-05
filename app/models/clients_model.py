@@ -25,7 +25,6 @@ class Client(db.Model):
     street: str
     number: int
     city: str
-    password_hash: str
     url_image: str = None
 
     __tablename__ = "clients"
