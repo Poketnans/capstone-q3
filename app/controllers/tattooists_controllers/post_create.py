@@ -1,19 +1,17 @@
 
-from json import loads
-from flask import current_app, jsonify, request
-from werkzeug.utils import secure_filename
-from sqlalchemy.orm import Session
 from http import HTTPStatus
+from json import loads
 
-from app.errors.invalid_value_types_error import InvalidValueTypesError
-from app.errors import JSONNotFound, FieldMissingError
-
-from sqlalchemy.exc import IntegrityError
+from flask import current_app, jsonify, request
 from psycopg2.errors import UniqueViolation
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+from werkzeug.utils import secure_filename
 
-
-from app.models import Tattooist
+from app.errors import FieldMissingError, JSONNotFound
+from app.errors.invalid_value_types_error import InvalidValueTypesError
 from app.errors.json_not_found import JSONNotFound
+from app.models import Tattooist
 from app.services.get_data_with_images import get_data_with_images, get_files
 from app.services.payload_eval import payload_eval
 
