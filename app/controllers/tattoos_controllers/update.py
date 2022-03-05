@@ -1,5 +1,6 @@
 from http import HTTPStatus
-from flask import current_app, jsonify, request
+from flask import jsonify, request
+from app.classes.app_with_db import current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import NoResultFound
@@ -50,4 +51,4 @@ def update(id_tattoo):
         return {"msg": "user does not have the access rights to do this"}, HTTPStatus.FORBIDDEN
 
     except NoResultFound as e:
-        return {"msg": "tattoo not found"}, HTTPStatus.NOT_FOUND
+        return {"msg": "not found"}, HTTPStatus.NOT_FOUND
