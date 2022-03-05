@@ -39,7 +39,7 @@ class Client(db.Model):
     image_name = Column(String)
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
-    
+
     @property
     def url_image(self):
         return self.url_image
