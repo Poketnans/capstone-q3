@@ -47,7 +47,7 @@ def update():
                 client.image_bin = file.file_bin
                 client.image_name = file.filename
                 client.image_mimetype = file.mimetype
-        if not data and files:
+        if not data and not files:
             raise JSONNotFound
 
         session.add(client)
