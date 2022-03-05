@@ -3,6 +3,8 @@ from flask import current_app, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.exc import NoResultFound
+
 
 from app.errors import JSONNotFound
 from app.models import Client
@@ -18,6 +20,8 @@ def update():
         id = client_jwt['id']
 
         client: Client = Client.query.get(id)
+        if not client:
+            raise NoResultFound
 
         data = get_data_with_images(exception=False)
         if(data):
@@ -45,14 +49,11 @@ def update():
         if not data and files:
             raise JSONNotFound
 
-        # session.add(client)
-        # session.commit()
-        print("")
-        print("CLient -> ", data)
-        print("")
-        print("CLient -> ", client)
-        print("")
+        session.add(client)
+        session.commit()
 
         return jsonify(client), HTTPStatus.OK
     except JSONNotFound as e:
-        return {"error": f"{e.describe}"}, e.status_code
+        return {"msg": f"{e.describe}"}, e.status_code
+    except NoResultFound as e:
+        return {"msg": "user not found"}, HTTPStatus.NOT_FOUND
