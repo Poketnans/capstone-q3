@@ -10,6 +10,7 @@ from app.errors import JSONNotFound
 from app.models import Client
 from app.services.get_data_with_images import get_data_with_images, get_files
 from app.services.payload_eval import payload_eval
+from app.errors import InvalidValueTypesError
 
 
 @jwt_required()
@@ -55,5 +56,7 @@ def update():
         return jsonify(client), HTTPStatus.OK
     except JSONNotFound as e:
         return {"msg": f"{e.describe}"}, e.status_code
+    except InvalidValueTypesError as err:
+        return jsonify(err.description), err.code
     except NoResultFound as e:
         return {"msg": "user not found"}, HTTPStatus.NOT_FOUND
