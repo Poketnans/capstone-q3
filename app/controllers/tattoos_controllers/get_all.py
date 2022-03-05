@@ -26,6 +26,6 @@ def get_all():
         "tattoist": {
                 "name": Tattooist.query.get(tattoo.id_tattooist).name,
                 "email": Tattooist.query.get(tattoo.id_tattooist).email,
-                "image": Tattooist.query.get(tattoo.id_tattooist).image_bin
+                "image": Tattooist.query.get(tattoo.id_tattooist).url_image
         }} for tattoo in tattoos
     ]), HTTPStatus.OK
