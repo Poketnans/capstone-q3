@@ -1,12 +1,14 @@
 from http import HTTPStatus
+
+import werkzeug.exceptions
 #from ipdb import set_trace
 from flask import request
 from flask_jwt_extended import create_access_token
-from app.models.clients_model import Client
-from app.services import payload_eval
-import werkzeug.exceptions
+
 from app.configs import Config
 from app.errors import FieldMissingError
+from app.models.clients_model import Client
+from app.services import payload_eval
 
 
 def post_login():

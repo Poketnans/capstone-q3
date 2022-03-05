@@ -1,5 +1,6 @@
-from flask import request
 from json import loads
+
+from flask import request
 from werkzeug.utils import secure_filename
 
 from app.errors import JSONNotFound
@@ -29,9 +30,8 @@ def get_data_with_images(exception: bool = True, key_form: str = "data") -> "dic
         data: dict = loads(request.form.get(key_form))
         if data.get("file"):
             data.pop("file")
-    else:
-        if exception:
-            raise JSONNotFound
+    elif exception:
+        raise JSONNotFound
     return data
 
 

@@ -1,16 +1,13 @@
-from sqlalchemy import (
-    Column, String, Integer, Text, Boolean, Date, LargeBinary
-)
-from sqlalchemy.orm import relationship, backref
-from app.configs.database import db
-
 from dataclasses import dataclass
 from uuid import uuid4
 
+from sqlalchemy import (Boolean, Column, Date, Integer, LargeBinary, String,
+                        Text)
 from sqlalchemy.dialects.postgresql import UUID
-from werkzeug.security import generate_password_hash, check_password_hash
-
+from sqlalchemy.orm import backref, relationship
 from werkzeug.security import check_password_hash, generate_password_hash
+
+from app.configs.database import db
 
 
 @dataclass
@@ -42,7 +39,7 @@ class Client(db.Model):
     image_name = Column(String)
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
-    
+
     @property
     def url_image(self):
         return self.url_image
