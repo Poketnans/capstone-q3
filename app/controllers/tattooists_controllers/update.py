@@ -1,7 +1,3 @@
-def update():
-    ...
-
-#ajustar corretamente para funcionar adquadamente    
 from http import HTTPStatus
 from flask import jsonify, request
 from app.classes.app_with_db import current_app
@@ -23,7 +19,7 @@ from app.services.get_data_with_images import get_files
         'password': str,
         "general_information": str
     },
-    optional=["general_information"]
+    optional=["general_information", "name" , "email" , "password"]
 )
 def update(payload):
     try:
@@ -42,9 +38,6 @@ def update(payload):
                 tattoist.image_bin = file.file_bin
                 tattoist.image_name = file.filename
                 tattoist.image_mimetype = file.mimetype
-
-        if not payload and not files:
-            raise JSONNotFound
 
 
         session.add(tattoist)
