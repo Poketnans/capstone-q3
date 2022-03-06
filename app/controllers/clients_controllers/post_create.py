@@ -1,14 +1,13 @@
-from http import HTTPStatus, client
+from http import HTTPStatus
 
 from flask import jsonify
 from psycopg2.errors import UniqueViolation
-from pytest import Session
 from sqlalchemy.exc import IntegrityError
-
+from sqlalchemy.orm import Session
 from app.classes.app_with_db import current_app
 from app.models.clients_model import Client
 from app.decorators import verify_payload
-from app.services.get_data_with_images import get_data_with_images, get_files
+from app.services.get_data_with_images import get_files
 
 
 @verify_payload(
@@ -26,7 +25,7 @@ from app.services.get_data_with_images import get_data_with_images, get_files
     optional=["general_information"]
 )
 def post_create(payload):
-    session = current_app.db.session
+    session: Session = current_app.db.session
 
     try:
         new_client = Client(**payload)

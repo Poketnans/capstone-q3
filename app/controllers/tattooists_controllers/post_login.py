@@ -14,7 +14,7 @@ def post_login():
     try:
         if data == None:
             raise FieldMissingError(description={"msg": "the body was empty"})
-        clean_data = payload_eval.payload_eval(
+        clean_data = payload_eval(
             data=data,
             email=str,
             password=str,
