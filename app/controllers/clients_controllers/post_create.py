@@ -21,12 +21,7 @@ from app.decorators import verify_payload
         'number': int,
         'city': str
     },
-    optional=[
-        "general_information",
-        "image_name",
-        "image_bin",
-        "image_mimetype",
-        "tattoos"]
+    optional=["general_information"]
 )
 def post_create(payload):
     session = current_app.db.session
