@@ -12,15 +12,7 @@ def get_specific(id_tattoo):
         tattoo = Tattoo.query.get_or_404(
             id_tattoo, description={"msg": "tattoo not found"})
 
-        return jsonify({
-            "id": tattoo.id,
-            "size": tattoo.size,
-            "colors": tattoo.colors,
-            "body_parts": tattoo.body_parts,
-            "id_client": tattoo.id_client,
-            "tattoo_schedule": tattoo.tattoo_schedule,
-            "tattoist": tattoo.tattooist
-        }), HTTPStatus.OK
+        return jsonify(tattoo), HTTPStatus.OK
     except werkzeug.exceptions.NotFound as e:
         return e.description, HTTPStatus.NOT_FOUND
     except DataError:
