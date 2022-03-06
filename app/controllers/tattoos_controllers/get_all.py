@@ -16,6 +16,7 @@ def get_all():
         "size": tattoo.size,
         "colors": tattoo.colors,
         "body_parts": tattoo.body_parts,
+        "id_client": tattoo.id_client,
         "tattoo_schedule": tattoo.tattoo_schedule,
         "tattoist": tattoo.tattooist} for tattoo in tattoos
     ]), HTTPStatus.OK
