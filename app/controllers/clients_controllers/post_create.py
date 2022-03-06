@@ -1,12 +1,14 @@
-from http import HTTPStatus
+from http import HTTPStatus, client
 
 from flask import jsonify
 from psycopg2.errors import UniqueViolation
+from pytest import Session
 from sqlalchemy.exc import IntegrityError
 
 from app.classes.app_with_db import current_app
 from app.models.clients_model import Client
 from app.decorators import verify_payload
+from app.services.get_data_with_images import get_data_with_images, get_files
 
 
 @verify_payload(
@@ -29,12 +31,20 @@ def post_create(payload):
     try:
         new_client = Client(**payload)
 
+        files = get_files()
+        if files:
+            for file in files:
+                new_client.image_bin = file.file_bin
+                new_client.image_name = file.filename
+                new_client.image_mimetype = file.mimetype
+
         session.add(new_client)
         session.commit()
 
     except IntegrityError as error:
         if isinstance(error.orig, UniqueViolation):
-            msg = {"error_message": "key value already registered"}
+            message = str(error.orig).split("Key")[1].split("=")[0]
+            msg = {"msg": f"{message[2:-1]} already registered"}
             return jsonify(msg), HTTPStatus.CONFLICT
-
+          
     return jsonify(new_client), HTTPStatus.CREATED
