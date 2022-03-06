@@ -1,7 +1,7 @@
 from app.errors import FieldMissingError, InvalidValueTypesError
 
 
-def payload_eval(data: dict, optional: list, **kwargs) -> dict:
+def payload_eval(data: dict, optional: list = [], **kwargs) -> dict:
     ''' Avalia o payload em existência, opcionalidade e tipo de campo. Retorna\n
         um dicionário contendo os campos que foram informados como argumentos\n
         nomeados, ou seja, ignora os campos excedentes.
@@ -39,18 +39,18 @@ def payload_eval(data: dict, optional: list, **kwargs) -> dict:
     ]
 
     if set(missing_keys).difference(optional):
-        msg = {"error": f"missing keys: {missing_keys}"}
+        msg = {"msg": f"required fields missing {missing_keys}"}
         raise FieldMissingError(description=msg)
 
-    invalid_types = {
-        "error":
-        f"Invalid type, `{field_name}` type should be {value_type} but was {type(data[field_name])}"
+    invalid_types_list = [
+        field_name
         for field_name, value_type in kwargs.items()
         if field_name in data.keys()
         if type(data[field_name]) != value_type
-    }
+    ]
 
-    if invalid_types:
-        raise InvalidValueTypesError(description=invalid_types)
+    if invalid_types_list:
+        msg = {"msg": f"invalid keys values {invalid_types_list}"}
+        raise InvalidValueTypesError(description=msg)
 
     return {key: data[key] for key in kwargs.keys() if key in data.keys()}

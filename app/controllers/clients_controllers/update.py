@@ -6,11 +6,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import NoResultFound
 
 
-from app.errors import JSONNotFound
+from app.errors import JSONNotFound, InvalidValueTypesError
 from app.models import Client
 from app.services.get_data_with_images import get_data_with_images, get_files
 from app.services.payload_eval import payload_eval
-from app.errors import InvalidValueTypesError
 
 
 @jwt_required()
@@ -47,7 +46,7 @@ def update():
                 client.image_bin = file.file_bin
                 client.image_name = file.filename
                 client.image_mimetype = file.mimetype
-        if not data and files:
+        if not data and not files:
             raise JSONNotFound
 
         session.add(client)
