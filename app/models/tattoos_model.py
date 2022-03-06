@@ -16,8 +16,9 @@ class Tattoo(db.Model):
     colors: bool
     body_parts: str
     id_client: str
-    id_tattooist: str
-    id_session: str
+    image_models: list
+    tattooist: dict
+    tattoo_schedule: dict
 
     __tablename__ = "tattoos"
 
