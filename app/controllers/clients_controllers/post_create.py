@@ -45,7 +45,7 @@ def post_create():
     except IntegrityError as error:
         if isinstance(error.orig, UniqueViolation):
             message = str(error.orig).split("Key")[1].split("=")[0]
-            msg = {"error_message": f"{message[2:-1]} already registered"}
+            msg = {"msg": f"{message[2:-1]} already registered"}
             return jsonify(msg), HTTPStatus.CONFLICT
     
     except FieldMissingError as err:
