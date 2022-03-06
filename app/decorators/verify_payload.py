@@ -9,14 +9,15 @@ from app.services.get_data_with_images import get_data_with_images
 from app.services import payload_eval
 
 
-def verify_payload(optional: list = [], **fields_and_types) -> Callable:
+def verify_payload(fields_and_types: dict = {}, optional: list = []) -> Callable:
     ''' 
         Realiza a verificação de payload e trata os erros associados.
 
         `optional` - lista com os nomes dos campos opcionais.
 
-        `kwargs` - campos possíveis para a requisição. Seus valores\n
-            correspondem ao tipo de dado permitido para aquele campo.
+        `fields_and_types` - dicionário com os campos possíveis para a\n
+            requisição. Seus valores correspondem ao tipo de dado permitido\n
+            para aquele campo.
 
         No final, este decorator passa, como argumento para o controller, um\n
             objeto chamado `payload` contendo os campos filtrados pela função\n
