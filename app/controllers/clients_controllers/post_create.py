@@ -29,9 +29,6 @@ from app.decorators import verify_payload
 def post_create(payload):
     session = current_app.db.session
 
-    from colorama import Fore
-    print(Fore.CYAN, payload)
-
     try:
         new_client = Client(**payload)
 
