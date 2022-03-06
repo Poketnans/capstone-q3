@@ -10,22 +10,24 @@ from app.decorators import verify_payload
 
 
 @verify_payload(
+    fields_and_types={
+        'name': str,
+        'email': str,
+        'password': str,
+        'birth_date': str,
+        'phone': str,
+        "general_information": str,
+        'street': str,
+        'number': int,
+        'city': str
+    },
     optional=[
         "general_information",
         "image_name",
         "image_bin",
         "image_mimetype",
-        "tattoos"],
-    **{
-        'name': str,
-        'email': str,
-        'birth_date': str,
-        'phone': str,
-        'password': str,
-        'street': str,
-        'number': int,
-        'city': str
-    })
+        "tattoos"]
+)
 def post_create(payload):
     session = current_app.db.session
 
