@@ -1,7 +1,6 @@
 from http import HTTPStatus
 
 import werkzeug.exceptions
-from flask import request
 from flask_jwt_extended import create_access_token
 
 from app.errors import FieldMissingError
