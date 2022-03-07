@@ -160,7 +160,7 @@ Caso já exista:
 }
 ```
 
-Caso o tipo de um dos campos seja errado seja lançado um erro com uma lista dos campos que foram recebidos com os tipos incorretos. Por exemplo:
+Caso o tipo de um ou mais  campos esteja incorreto será lançado um erro com uma lista desses campos. Por exemplo:
 
 O campo name foi enviado como número.
 
