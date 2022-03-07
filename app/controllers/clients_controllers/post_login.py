@@ -28,5 +28,4 @@ def post_login(payload):
         return {"access token": token}
     except werkzeug.exceptions.NotFound as e:
         return e.description, HTTPStatus.NOT_FOUND
-    except FieldMissingError as e:
-        return e.description, HTTPStatus.BAD_REQUEST
+    
