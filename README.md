@@ -57,6 +57,7 @@ pip install -r requirements.txt
 5 - Rodar o servidor
 ```bash
 flask run
+```
 
 
 ## Contributors
