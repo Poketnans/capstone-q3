@@ -12,9 +12,6 @@ from app.decorators import verify_payload
     "password":str,})
 def post_login(payload):
     try:
-        if payload == None:
-            raise FieldMissingError(description={"msg": "the body was empty"})
-
         user = Tattooist.query.filter_by(email=payload["email"]).first_or_404(
             description={"msg": "user not found"})
 
