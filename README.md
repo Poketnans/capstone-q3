@@ -31,7 +31,8 @@ O Objetivo da aplicação é o usuário cliente marcar agendamentos de tatuagem 
 - Gunicorn
 
 # Como executar
-pré-requisitos : python 3.9, biblioteca pip.
+Pré-requisitos : python 3.9, biblioteca pip.
+
 Executa: 
 1 - Criar um ambiente vitual venv :
 ```bash
