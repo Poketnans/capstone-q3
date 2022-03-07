@@ -90,7 +90,9 @@ flask run
 
 ### Client POST - Essa rota cria o tatuador
 Nessa aplicação o usuário não registrado pode se cadastrar na plataforma por JSON ou Multipart-form.
+
 Aqui conseguimos ver os parametros para o cadastro:
+
 **JSON**
 Neste tipo de cadastro o usuário não faz upload de foto.
 ```json
