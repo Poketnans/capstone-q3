@@ -45,5 +45,5 @@ def post_create(payload):
             message = str(error.orig).split("Key")[1].split("=")[0]
             msg = {"msg": f"{message[2:-1]} already registered"}
             return jsonify(msg), HTTPStatus.CONFLICT
-          
+
     return jsonify(new_client), HTTPStatus.CREATED
