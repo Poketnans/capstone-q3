@@ -1,4 +1,4 @@
-# Metamorfo Tatoo Api
+# Metamorfo Tattoo Api
 ### Controle seus agendamentos de tatoo e materiais.
 > Status: Em Desenvolvimento ⚠️
 
@@ -65,7 +65,7 @@ flask run
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
-<table>
+<table textAlign="center">
   <tr>
   <td align="center"><a href="https://github.com/BeatrixFox"><img src="https://avatars.githubusercontent.com/u/72284689?v=4" width="100px;" alt=""/><br />
     </td>
