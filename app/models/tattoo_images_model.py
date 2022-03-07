@@ -12,9 +12,7 @@ class TattooImage(db.Model):
 
     id: str
     id_tattoo: str
-    image_name: str
-    image_bin: str
-    iamge_mimetype: str
+    url_image: str = None
 
     __tablename__ = "tattoo_images"
 
@@ -24,3 +22,12 @@ class TattooImage(db.Model):
     iamge_mimetype = Column(String, nullable=False)
 
     id_tattoo = Column(UUID(as_uuid=True), ForeignKey("tattoos.id"))
+    
+    @property
+    def url_image(self):
+        return self.url_image
+
+    @url_image.getter
+    def url_image(self, text="http://localhost:5000/tattoo/image/"):
+        url = f"{text}{self.image_name}"
+        return url
