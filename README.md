@@ -86,11 +86,12 @@ flask run
 
 # Endpoints
 
-## Rotas que precisam de autenticação
+<h2 align ='center'> Rotas que precisam de autenticação </h2>
 
-###  Client Endpoint Post
+<h2 align ='center'> Client Endpoint Post </h2>
 
-<h2 align ='center'> Essa rota cria o tatuador</h2>
+# Essa rota cria o tatuador
+
 Nessa aplicação o usuário não registrado pode se cadastrar na plataforma por JSON ou Multipart-form.
 Aqui conseguimos ver os parametros para o cadastro:
 **JSON**
