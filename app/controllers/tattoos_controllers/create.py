@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from flask import jsonify
-from psycopg2.errors import UniqueViolation
+from psycopg2.errors import ForeignKeyViolation
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -12,7 +12,7 @@ from app.models.tattoos_model import Tattoo
 from app.models.sessions_model import Session
 from app.models.tattoo_images_model import TattooImage
 from app.decorators import verify_payload
-from app.services import payload_eval, get_files
+from app.services import payload_eval, get_orig_error_field, get_files
 
 
 @jwt_required()
@@ -50,7 +50,6 @@ def create(payload: dict):
                 image_payload = {
                     "image_bin": file.file_bin,
                     "image_name": file.filename,
-                    # TODO: campo do mimetype está escrito errado no banco
                     "image_mimetype": file.mimetype,
                     "id_tattoo": new_tattoo.id
                 }
@@ -68,9 +67,11 @@ def create(payload: dict):
         return jsonify(err.description), err.code
 
     except IntegrityError as error:
-        if isinstance(error.orig, UniqueViolation):
-            message = str(error.orig).split("Key")[1].split("=")[0]
-            msg = {"msg": f"{message[2:-1]} already registered"}
+        if isinstance(error.orig, ForeignKeyViolation):
+            error_field = get_orig_error_field(error)
+            msg = {"msg": f"{error_field} not found"}
             return jsonify(msg), HTTPStatus.CONFLICT
+        else:
+            raise error
 
     return jsonify(new_tattoo), HTTPStatus.CREATED
