@@ -2,6 +2,7 @@ from re import match
 from functools import wraps
 from flask import request
 import datetime
+from app.services import get_files
 
 
 def validator(
@@ -17,17 +18,19 @@ def validator(
     '''
             Decorator valida os campos do request pelo tipo de campo requerido.
             Tipos:
-                - `date`: Verifica se o formato da data é valido e se essa data ainda não passou
+
+                -> Todos os formatos de data são `DD/MM/YYYY`
+                - `date`: Verifica se o formato da data é valido e se essa data ainda não passou.
                 - `birthdate`: Verifica se o formato da data é valido.
-                - `zip_code`: Verifica se o formato CEP é valido.
-                - `cpf`: Verifica se o formato da CPF é valido.
+                - `zip_code`: Verifica se o formato CEP é valido. O CEP aceita somente nesse formato `60000-000`.
+                - `cpf`: Verifica se o formato da CPF é valido. O CPF aceita somente números `12345678901` ou números separados por ponto `123.456.789.01`.
                 - `email`: Verifica se o formato da email é valido.
                 - `password`: Verifica se o formato do password é valido. O password aceita somente uma letra Maiuscula , uma minuscula um numero e um caracter especial.
                 - `name`: Verifica se o formato de USER_NAME é valido. O USER_NAME aceita somente letras e sem espaço.
 
 
             Exceções:
-                `É lançado excesões com uma mensagem de erro apra cada validação`
+                `É lançada excesão personalidazada para cada validação`
     '''
     def received_function(function):
         @wraps(function)
@@ -40,12 +43,14 @@ def validator(
             regex_cep = "^[0-9]{5}-[0-9]{3}$"
             regex_cpf = "^[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\.?[0-9]{2}$"
             regex_email = "^[\w\.]+@([\w-]+\.)+[\w-]{2,4}$"
+
             # nome usuario somente letras sem espaço e sem numero.
             regex_name = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\s]+$"
+
             # uma letra Maiuscula , uma minuscula um numero e um caracter especial
             regex_password = "^((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$"
 
-            request_json: dict = request.get_json()
+            request_json: dict = get_files()
 
             if request_json.get(date):
                 date_now = datetime.date.today()
