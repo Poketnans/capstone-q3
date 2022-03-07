@@ -19,7 +19,7 @@ class TattooImage(db.Model):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     image_bin = Column(LargeBinary, nullable=False)
     image_name = Column(String, nullable=False)
-    iamge_mimetype = Column(String, nullable=False)
+    image_mimetype = Column(String, nullable=False)
 
     id_tattoo = Column(UUID(as_uuid=True), ForeignKey("tattoos.id"))
     
