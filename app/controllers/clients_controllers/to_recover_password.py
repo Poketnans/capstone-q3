@@ -7,14 +7,13 @@ from sqlalchemy.orm import Session
 from app.errors import NotAnAdmin
 from app.models import Client
 from flask_jwt_extended import get_jwt_identity, jwt_required
-from app.decorators import verify_payload  # ,validator
+from app.decorators import verify_payload, validator
 
 from app.models.tattooists_model import Tattooist
 
-# @validator(password="password")
-
 
 @jwt_required()
+@validator(password="password")
 @verify_payload(
     fields_and_types={
         'password': str,
