@@ -7,15 +7,18 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app.errors import FieldMissingError, InvalidValueTypesError
 from app.classes.app_with_db import current_app
+
 from app.models.tattoos_model import Tattoo
 from app.models.sessions_model import Session
 from app.models.tattoo_images_model import TattooImage
-from app.decorators import verify_payload
+
+from app.decorators import verify_payload, validator
 from app.services import payload_eval
 from app.services.get_data_with_images import get_files
 
 
 @jwt_required()
+@validator
 @verify_payload(
     fields_and_types={
         "size": str,
