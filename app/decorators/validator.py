@@ -14,6 +14,7 @@ def validator(
     email=None,
     password=None,
     birthdate: str = None,
+    interval_date: dict = None
 ):
     '''
             Decorator valida os campos do request pelo tipo de campo requerido.
@@ -28,7 +29,7 @@ def validator(
                 - `password`: Verifica se o formato do password é valido. O password aceita somente uma letra Maiuscula , uma minuscula, um número e um caracter especial.
                 - `name`: Verifica se o formato de USER_NAME é valido. O USER_NAME aceita somente letras e sem espaço.
                 - `phone`: Verifica se o formato do phone é valido. O phone aceita somente números. Lembrando que só são aceitos números de telefones fixos e móveis válidos no Brasil.
-
+                - `verify_two`: Verifica se a data atual esta entre este intervalo
 
             Exceções:
                 `É lançada excesão personalida para cada validação`

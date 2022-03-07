@@ -4,7 +4,7 @@ from app.classes.app_with_db import current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.orm import Session
 from app.models import Tattooist
-from app.decorators import verify_payload
+from app.decorators import verify_payload, validator
 from psycopg2.errors import UniqueViolation
 from sqlalchemy.exc import IntegrityError
 from app.errors import JSONNotFound
@@ -12,6 +12,7 @@ from app.services import get_files
 
 
 @jwt_required()
+@validator(email="email", password="password")
 @verify_payload(
     fields_and_types={
         'name': str,

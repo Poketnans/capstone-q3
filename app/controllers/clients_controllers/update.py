@@ -14,7 +14,7 @@ from app.decorators import validator
 
 
 @jwt_required()
-@validator(password="password", birthdate="birth_date", phone="phone", email="email")
+@validator(password="password", phone="phone", email="email")
 def update():
     try:
         session: Session = current_app.db.session
