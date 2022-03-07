@@ -16,9 +16,6 @@ from app.decorators.verify_payload import verify_payload
     optional=[])
 def post_login(payload):
     try:
-        if payload == None:
-            raise FieldMissingError(description={"msg": "the body was empty"})
-
         user = Client.query.filter_by(email=payload["email"]).first_or_404(
             description={"msg": "user not found"})
 
