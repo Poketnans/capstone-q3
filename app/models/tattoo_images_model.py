@@ -5,7 +5,7 @@ from sqlalchemy import Column, ForeignKey, LargeBinary, String
 from sqlalchemy.dialects.postgresql import UUID
 
 from app.configs.database import db
-
+from app.classes.app_with_db import current_app
 
 @dataclass
 class TattooImage(db.Model):
@@ -28,6 +28,8 @@ class TattooImage(db.Model):
         return self.url_image
 
     @url_image.getter
-    def url_image(self, text="http://localhost:5000/tattoo/image/"):
-        url = f"{text}{self.image_name}"
+    def url_image(self):
+        baseUrl = current_app.config["BASE_URL"]
+        endpoint = "/tattoo/image/"
+        url = f"{baseUrl}{endpoint}{self.image_name}"
         return url
