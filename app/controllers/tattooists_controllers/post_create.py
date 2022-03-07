@@ -12,14 +12,14 @@ from app.errors import FieldMissingError, JSONNotFound
 from app.errors.invalid_value_types_error import InvalidValueTypesError
 from app.errors.json_not_found import JSONNotFound
 from app.models import Tattooist
-from app.services.get_data_with_images import get_data_with_images, get_files
+from app.services import get_data, get_files
 from app.services.payload_eval import payload_eval
 
 
 def post_create():
     try:
         session: Session = current_app.db.session
-        data = get_data_with_images()
+        data = get_data()
 
         data_types = {
             "name": str,

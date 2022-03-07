@@ -1,14 +1,14 @@
 from http import HTTPStatus
 from flask import jsonify, request
 from app.classes.app_with_db import current_app
-from flask_jwt_extended import jwt_required , get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.orm import Session
 from app.models import Tattooist
 from app.decorators import verify_payload
 from psycopg2.errors import UniqueViolation
 from sqlalchemy.exc import IntegrityError
 from app.errors import JSONNotFound
-from app.services.get_data_with_images import get_files
+from app.services import get_files
 
 
 @jwt_required()
@@ -19,7 +19,7 @@ from app.services.get_data_with_images import get_files
         'password': str,
         "general_information": str
     },
-    optional=["general_information", "name" , "email" , "password"]
+    optional=["general_information", "name", "email", "password"]
 )
 def update(payload):
     try:
@@ -38,7 +38,6 @@ def update(payload):
                 tattoist.image_bin = file.file_bin
                 tattoist.image_name = file.filename
                 tattoist.image_mimetype = file.mimetype
-
 
         session.add(tattoist)
         session.commit()
