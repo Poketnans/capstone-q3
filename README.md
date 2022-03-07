@@ -2,7 +2,7 @@
 ### Controle seus agendamentos de tatoo e materiais.
 > Status: Em Desenvolvimento ⚠️
 
-[![NPM](https://img.shields.io/npm/l/react)](https://github.com/Brunoro811/teste-font-end-competi/blob/main/LICENSE)
+[![NPM](https://img.shields.io/npm/l/react)](https://github.com/Poketnans/metamorfo-tattoo/blob/development/LICENSE)
 # Sobre o Projeto
 ### Base url da api
 https://metamorfo-tattoo.herokuapp.com/
