@@ -4,8 +4,10 @@ import werkzeug.exceptions
 from flask_jwt_extended import create_access_token
 
 from app.models.tattooists_model import Tattooist
-from app.decorators import verify_payload
+from app.decorators import verify_payload, validator
 
+
+@validator(email="email", password="password")
 @verify_payload(
     fields_and_types={
         "email": str,

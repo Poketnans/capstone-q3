@@ -5,14 +5,15 @@ from flask_jwt_extended import create_access_token
 
 from app.errors import FieldMissingError
 from app.models.clients_model import Client
-from app.decorators.verify_payload import verify_payload
+from app.decorators import verify_payload, validator
 
 
+@validator(password="password", email="email")
 @verify_payload(
-    fields_and_types = {
-        "email":str,
-        "password":str
-        },
+    fields_and_types={
+        "email": str,
+        "password": str
+    },
     optional=[])
 def post_login(payload):
     try:
@@ -28,4 +29,3 @@ def post_login(payload):
         return {"access token": token}
     except werkzeug.exceptions.NotFound as e:
         return e.description, HTTPStatus.NOT_FOUND
-    
