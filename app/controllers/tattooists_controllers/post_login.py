@@ -1,34 +1,28 @@
 from http import HTTPStatus
 
 import werkzeug.exceptions
-from flask import request
 from flask_jwt_extended import create_access_token
 
 from app.errors import FieldMissingError
 from app.models.tattooists_model import Tattooist
-from app.services import payload_eval
+from app.decorators import verify_payload
 
-
-def post_login():
-    data = request.get_json()
+@verify_payload({
+    "email":str,
+    "password":str,})
+def post_login(payload):
     try:
-        if data == None:
+        if payload == None:
             raise FieldMissingError(description={"msg": "the body was empty"})
-        clean_data = payload_eval(
-            data=data,
-            email=str,
-            password=str,
-            optional=[]
-        )
 
-        user = Tattooist.query.filter_by(email=clean_data["email"]).first_or_404(
+        user = Tattooist.query.filter_by(email=payload["email"]).first_or_404(
             description={"msg": "user not found"})
 
-        if not user.verify_password(clean_data["password"]):
+        if not user.verify_password(payload["password"]):
             return {"msg": "wrong password"}, HTTPStatus.FORBIDDEN
 
         token = create_access_token(
-            identity=user)
+            identity={"id": user.id})
 
         return {"access token": token}
     except werkzeug.exceptions.NotFound as e:
