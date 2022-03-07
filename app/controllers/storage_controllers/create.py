@@ -28,7 +28,8 @@ def create():
 
         optional_fields = ['description']
 
-        payload = payload_eval(data=payload, optional=optional_fields, **fields)
+        payload = payload_eval(
+            data=payload, optional=optional_fields, **fields)
 
         new_item = Storage(**payload)
 

@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 from uuid import uuid4
 
-from sqlalchemy import (Boolean, Column, Date, Integer, LargeBinary, String,
+from sqlalchemy import (Column, Date, Integer, LargeBinary, String,
                         Text)
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import backref, relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.configs.database import db
@@ -23,6 +22,7 @@ class Client(db.Model):
     number: int
     city: str
     url_image: str = None
+    tattoos: list = None
 
     __tablename__ = "clients"
 
@@ -39,7 +39,7 @@ class Client(db.Model):
     image_name = Column(String)
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
-    
+
     @property
     def url_image(self):
         return self.url_image
