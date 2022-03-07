@@ -16,15 +16,14 @@ from app.decorators.verify_payload import verify_payload
         },
     optional=[])
 def post_login(payload):
-    data = request.get_json()
     try:
-        if data == None:
+        if payload == None:
             raise FieldMissingError(description={"msg": "the body was empty"})
 
-        user = Client.query.filter_by(email=data["email"]).first_or_404(
+        user = Client.query.filter_by(email=payload["email"]).first_or_404(
             description={"msg": "user not found"})
 
-        if not user.verify_password(data["password"]):
+        if not user.verify_password(payload["password"]):
             return {"msg": "wrong password"}, HTTPStatus.FORBIDDEN
 
         token = create_access_token(
