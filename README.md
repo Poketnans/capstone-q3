@@ -150,6 +150,24 @@ Array com chaves em string.
  formdata.append("data", JSON.stringify(objectClient));
  
 ```
+Errors:
 
+Caso já exista:
+
+```409 LICT
+{
+  "msg": "email already registered"
+}
+```
+
+Caso o tipo de um dos campos seja errado seja lançado um erro com uma lista dos campos que foram recebidos com os tipos incorretos. Por exemplo:
+
+O campo name foi enviado como número.
+
+```400 BAD REQUEST
+{
+  "msg": "invalid keys values ['name']"
+}
+```
    
 
