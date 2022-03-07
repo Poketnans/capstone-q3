@@ -83,7 +83,9 @@ flask run
   </tr>
 </table>
 <hr/>
+
 # Endpoints
+
 ## Rotas que precisam de autenticação
 
 ###  Client Endpoint Post
