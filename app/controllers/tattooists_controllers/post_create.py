@@ -8,9 +8,10 @@ from sqlalchemy.orm import Session
 
 from app.models import Tattooist
 from app.services import get_files
-from app.decorators import verify_payload
+from app.decorators import verify_payload, validator
 
 
+@validator(email="email", password="password")
 @verify_payload(
     fields_and_types={
         "name": str,

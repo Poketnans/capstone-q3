@@ -7,11 +7,12 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.errors import JSONNotFound, InvalidValueTypesError
 from app.models import Client
-from app.decorators import verify_payload
 from app.services import get_files
+from app.decorators import validator,verify_payload
 
 
 @jwt_required()
+@validator(password="password", phone="phone", email="email")
 @verify_payload(fields_and_types={
                 'name': str,
                 'email': str,
@@ -22,7 +23,9 @@ from app.services import get_files
                 'city': str,
                 'general_information': str,
                 }, optional=['name', 'email', 'phone', 'password', 'street', 'number', 'city', 'general_information'])
+
 def update(payload):
+
     try:
         session: Session = current_app.db.session
         client_jwt = get_jwt_identity()
