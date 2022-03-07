@@ -14,7 +14,7 @@ O Objetivo da aplicação é o usuário cliente marcar agendamentos de tatuagem 
 # Tecnologias Utilizadas
 - Python
 - Micro Framework Flask
-- DB Postgress
+- DB PostgreSQL
 - Deploy Heroku
 
 
