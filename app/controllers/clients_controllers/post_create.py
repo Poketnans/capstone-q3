@@ -6,10 +6,11 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from app.classes.app_with_db import current_app
 from app.models.clients_model import Client
-from app.decorators import verify_payload
-from app.services.get_data_with_images import get_files
+from app.decorators import verify_payload, validator
+from app.services import get_files
 
 
+@validator(password="password", birthdate="birth_date", phone="phone", email="email")
 @verify_payload(
     fields_and_types={
         'name': str,
