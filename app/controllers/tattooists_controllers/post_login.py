@@ -6,7 +6,6 @@ from flask_jwt_extended import create_access_token
 from app.models.tattooists_model import Tattooist
 from app.decorators import verify_payload
 
-
 @verify_payload(
     fields_and_types={
         "email": str,
@@ -22,7 +21,7 @@ def post_login(payload):
             return {"msg": "wrong password"}, HTTPStatus.FORBIDDEN
 
         token = create_access_token(
-            identity=user)
+            identity={"id": user.id})
 
         return {"access token": token}, HTTPStatus.OK
     except werkzeug.exceptions.NotFound as e:
