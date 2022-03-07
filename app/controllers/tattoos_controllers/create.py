@@ -11,7 +11,7 @@ from app.models.tattoos_model import Tattoo
 from app.models.sessions_model import Session
 from app.models.tattoo_images_model import TattooImage
 from app.decorators import verify_payload
-from app.services import payload_eval
+from app.services import payload_eval, get_orig_error_field
 from app.services.get_data_with_images import get_files
 
 
@@ -67,13 +67,9 @@ def create(payload: dict):
         return jsonify(err.description), err.code
 
     except IntegrityError as error:
-        if isinstance(error.orig, UniqueViolation):
-            message = str(error.orig).split("Key")[1].split("=")[0]
-            msg = {"msg": f"{message[2:-1]} already registered"}
-            return jsonify(msg), HTTPStatus.CONFLICT
-        elif isinstance(error.orig, ForeignKeyViolation):
-            message = str(error.orig).split("Key")[1].split("=")[0]
-            msg = {"msg": f"{message[2:-1]} not found"}
+        if isinstance(error.orig, ForeignKeyViolation):
+            error_field = get_orig_error_field(error)
+            msg = {"msg": f"{error_field} not found"}
             return jsonify(msg), HTTPStatus.CONFLICT
         else:
             raise error
