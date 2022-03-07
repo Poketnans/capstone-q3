@@ -2,12 +2,12 @@
 from http import HTTPStatus
 
 from flask import current_app, jsonify
-from psycopg2.errors import UniqueViolation
+from psycopg2.errors import UniqueViolation, ForeignKeyViolation
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models import Tattooist
-from app.services import get_files
+from app.services import get_files, get_orig_error_field
 from app.decorators import verify_payload
 
 
@@ -39,6 +39,14 @@ def post_create(payload):
 
         return jsonify(new_tatooist), HTTPStatus.CREATED
 
-    except IntegrityError as e:
-        if isinstance(e.orig, UniqueViolation):
-            return {"msg": "email already exists"}, e.code
+    except IntegrityError as error:
+        if isinstance(error.orig, UniqueViolation):
+            error_field = get_orig_error_field(error)
+            msg = {"msg": f"{error_field} already registered"}
+            return jsonify(msg), HTTPStatus.CONFLICT
+        elif isinstance(error.orig, ForeignKeyViolation):
+            error_field = get_orig_error_field(error)
+            msg = {"msg": f"{error_field} not found"}
+            return jsonify(msg), HTTPStatus.CONFLICT
+        else:
+            raise error
