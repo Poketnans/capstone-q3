@@ -36,7 +36,7 @@ def get_data_with_images(exception: bool = True, key_form: str = "data") -> "dic
 
 
 def get_files(limite=None) -> "list[ImageFile] or None":
-    ''' Função captura os arquivos de uma rota.
+    ''' Função captura os arquivos de uma rota
         A captura é feita caso a rota seja com `Multipart-form` caso contrario retorna none.
         `limite` é opicional e referente a quantidade de imagens.
     '''
