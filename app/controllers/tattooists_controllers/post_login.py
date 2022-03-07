@@ -3,13 +3,15 @@ from http import HTTPStatus
 import werkzeug.exceptions
 from flask_jwt_extended import create_access_token
 
-from app.errors import FieldMissingError
 from app.models.tattooists_model import Tattooist
 from app.decorators import verify_payload
 
-@verify_payload({
-    "email":str,
-    "password":str,})
+@verify_payload(
+    fields_and_types={
+        "email": str,
+        "password": str,
+    }
+)
 def post_login(payload):
     try:
         user = Tattooist.query.filter_by(email=payload["email"]).first_or_404(
@@ -21,6 +23,6 @@ def post_login(payload):
         token = create_access_token(
             identity={"id": user.id})
 
-        return {"access token": token}
+        return {"access token": token}, HTTPStatus.OK
     except werkzeug.exceptions.NotFound as e:
         return e.description, HTTPStatus.NOT_FOUND
