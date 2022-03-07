@@ -11,8 +11,7 @@ from app.models.tattoos_model import Tattoo
 from app.models.sessions_model import Session
 from app.models.tattoo_images_model import TattooImage
 from app.decorators import verify_payload
-from app.services import payload_eval
-from app.services.get_data_with_images import get_files
+from app.services import payload_eval, get_files
 
 
 @jwt_required()

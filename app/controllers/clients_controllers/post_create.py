@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.classes.app_with_db import current_app
 from app.models.clients_model import Client
 from app.decorators import verify_payload
-from app.services.get_data_with_images import get_files
+from app.services import get_files
 
 
 @verify_payload(

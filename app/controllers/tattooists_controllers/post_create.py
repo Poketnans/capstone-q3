@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models import Tattooist
-from app.services.get_data_with_images import get_files
+from app.services import get_files
 from app.decorators import verify_payload
 
 

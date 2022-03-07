@@ -7,8 +7,8 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.errors import JSONNotFound, InvalidValueTypesError
 from app.models import Client
-from app.services.get_data_with_images import get_files
-from app.decorators.verify_payload import verify_payload
+from app.decorators import verify_payload
+from app.services import get_files
 
 
 @jwt_required()
