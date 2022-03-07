@@ -5,3 +5,4 @@ from .post_create import post_create
 from .post_login import post_login
 from .update import update
 from .get_image import get_image
+from .to_recover_password import to_recover_password
