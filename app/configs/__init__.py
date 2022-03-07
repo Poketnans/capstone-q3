@@ -13,10 +13,12 @@ class Config:
 
 class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv('DB_URI')
+    BASE_URL = os.getenv('DEV_BASE_URL')
 
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv('DB_URI')
+    BASE_URL = os.getenv('PROD_BASE_URL')
 
 
 config_selector = {
