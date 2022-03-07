@@ -82,4 +82,72 @@ flask run
     
   </tr>
 </table>
+<hr/>
+# Endpoints
+## Rotas que precisam de autenticação
+
+###  Client Endpoint Post
+
+<h2 align ='center'> Essa rota cria o tatuador</h2>
+Nessa aplicação o usuário não registrado pode se cadastrar na plataforma por JSON ou Multipart-form.
+Aqui conseguimos ver os parametros para o cadastro:
+**JSON**
+Neste tipo de cadastro o usuário não faz upload de foto.
+```json
+{
+	"name": "name",
+	"email": "email@email.com",
+	"password": "1234",
+	"birth_date": "10/10/1995",
+	"phone": "85912345678",
+	"general_information": "",
+	"street": "rua",
+	"number": 1234,
+	"city": "fortaleza"
+}
+```
+Caso dê tudo certo, a resposta será assim:
+
+`POST /create -  FORMATO DA RESPOSTA - STATUS 201`
+```json
+{
+  "id": "72162140-3a69-41f9-9127-d4c4c43bea8a",
+  "name": "name",
+  "email": "email@email.com",
+  "birth_date": "Tue, 10 Oct 1995 00:00:00 GMT",
+  "phone": "85912345678",
+  "general_information": null,
+  "street": "rua",
+  "number": 1234,
+  "city": "fortaleza"
+}
+```
+
+**Multipart-form ou Form**
+Neste tipo de cadastro o usuário não faz upload de foto.
+Array com chaves em string.
+```
+['data'] = "{
+	"name": "Ciclano 2 ",
+	"email": "ciclano3@email.com",
+	"password": "123456",
+	"birth_date": "24/4/1990",
+	"phone": "88997998995",
+	"general_information": "Nenhuma",
+	"street": "Av. Bordo Amour",
+	"number": 254,
+	"city": "Cidade Verde"
+}" 
+['file] = FileStorage
+```
+**Recomendado usar JavaScript, com o objeto da Class FormData**
+```js
+
+ const formdata = new FormData();
+ formdata.append("file", product.file[0]);
+ formdata.append("data", JSON.stringify(objectClient));
+ 
+```
+
+   
 
