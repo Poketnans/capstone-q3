@@ -8,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.errors import JSONNotFound, InvalidValueTypesError
 from app.models import Client
-from app.services.get_data_with_images import get_data_with_images, get_files
+from app.services import get_data, get_files
 from app.services.payload_eval import payload_eval
 
 
@@ -23,7 +23,7 @@ def update():
         if not client:
             raise NoResultFound
 
-        data = get_data_with_images(exception=False)
+        data = get_data(exception=False)
         if(data):
             optional_fields = ["name", "email", "password", "phone", "general_information",
                                "street", "number", "city", "image_name", "image_bin", "image_mimetype"]
