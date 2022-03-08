@@ -39,7 +39,7 @@ def post_create(payload):
                 new_client.image_name = file.filename
                 new_client.image_mimetype = file.mimetype
         else:
-            default_profile_image = os.getenv("PATTERN_IMAGE_ID_CLIENT")
+            default_profile_image = os.getenv("DEFAULT_IMAGE_ID_CLIENT")
             new_client.image_bin = Client.query.get(default_profile_image).image_bin
             new_client.image_name = Client.query.get(default_profile_image).image_name
             new_client.image_mimetype = Client.query.get(default_profile_image).image_mimetype
