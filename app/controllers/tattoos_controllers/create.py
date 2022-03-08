@@ -60,6 +60,7 @@ def create(payload: dict):
 
         session.add(new_tattoo)
         session.commit()
+        return jsonify(new_tattoo), HTTPStatus.CREATED
 
     except InvalidValueTypesError as err:
         return jsonify(err.description), err.code
@@ -74,4 +75,3 @@ def create(payload: dict):
         else:
             raise error
 
-    return jsonify(new_tattoo), HTTPStatus.CREATED
