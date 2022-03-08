@@ -12,4 +12,4 @@ def get_image(image_name: str):
             raise NoResultFound
         return Response(tattoo_image.image_bin, mimetype=tattoo_image.image_mimetype), HTTPStatus.OK
     except NoResultFound:
-        return {"msg": "image tattooist not found"}, HTTPStatus.NOT_FOUND
+        return {"msg": "image tattoo not found"}, HTTPStatus.NOT_FOUND
