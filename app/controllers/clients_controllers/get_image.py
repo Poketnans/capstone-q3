@@ -1,14 +1,15 @@
 from http import HTTPStatus
 from flask import Response
-
 from app.models import Client
 from sqlalchemy.orm.exc import NoResultFound
 
 
-def get_image(image_name: str):
+def get_image(image_hash: str):
     try:
-        client: Client = Client.query.filter_by(image_name=image_name).first()
-        if not client:
+        client_list: list = [client for client in Client.query.all() if client.image_hash == image_hash]
+        if client_list:
+            client = client_list[0]
+        else:
             raise NoResultFound
         return Response(client.image_bin, mimetype=client.image_mimetype), HTTPStatus.OK
     except NoResultFound:

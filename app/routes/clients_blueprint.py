@@ -8,7 +8,7 @@ bp_clients.post("/clients")(post_create)
 bp_clients.get("/client")(get_specific)
 bp_clients.get("/clients")(get_all)
 bp_clients.delete("/clients")(delete)
-bp_clients.get("/client/image/<image_name>")(get_image)
+bp_clients.get("/client/image/<image_hash>")(get_image)
 bp_clients.patch("/clients")(update)
 bp_clients.patch("/clients")(update)
 

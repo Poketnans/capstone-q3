@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from uuid import uuid4
 
+import hashlib
 from sqlalchemy import (Column, Date, Integer, LargeBinary, String,
                         Text)
 from sqlalchemy.dialects.postgresql import UUID
@@ -24,6 +25,7 @@ class Client(db.Model):
     city: str
     url_image: str = None
     tattoos: list = None
+    image_name_hash: str = None
 
     __tablename__ = "clients"
 
@@ -40,11 +42,11 @@ class Client(db.Model):
     image_name = Column(String)
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
-    
+
     @property
     def url_image(self):
         return self.url_image
-    
+
     @url_image.getter
     def url_image(self):
         baseUrl = current_app.config["BASE_URL"]
@@ -64,9 +66,9 @@ class Client(db.Model):
         return check_password_hash(self.password_hash, password_to_compare)
 
     @property
-    def image_name_hash(self):
-        return self.image_name_hash
+    def image_hash(self):
+        return self.image_hash
 
-    @image_name_hash.getter
-    def image_name_hash(self):
-        return f"{self.image_name}{self.id}"
+    @image_hash.getter
+    def image_hash(self):
+        return hashlib.md5(f"{self.image_name}{self.id}".encode()).hexdigest()
