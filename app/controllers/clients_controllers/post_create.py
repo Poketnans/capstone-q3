@@ -8,6 +8,7 @@ from app.classes.app_with_db import current_app
 from app.models.clients_model import Client
 from app.decorators import verify_payload, validator
 from app.services import get_files
+import os
 
 
 @validator(password="password", birthdate="birth_date", phone="phone", email="email")
@@ -37,7 +38,12 @@ def post_create(payload):
                 new_client.image_bin = file.file_bin
                 new_client.image_name = file.filename
                 new_client.image_mimetype = file.mimetype
-
+        else:
+            default_profile_image = os.getenv("PATTERN_IMAGE_ID")
+            new_client.image_bin = Client.query.get(default_profile_image).image_bin
+            new_client.image_name = Client.query.get(default_profile_image).image_name
+            new_client.image_mimetype = Client.query.get(default_profile_image).image_mimetype
+            
         session.add(new_client)
         session.commit()
 
