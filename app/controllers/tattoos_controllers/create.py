@@ -11,11 +11,12 @@ from app.classes.app_with_db import current_app
 from app.models.tattoos_model import Tattoo
 from app.models.sessions_model import Session
 from app.models.tattoo_images_model import TattooImage
-from app.decorators import verify_payload
+from app.decorators import verify_payload, validator
 from app.services import payload_eval, get_orig_error_field, get_files
 
 
 @jwt_required()
+@validator(date_schedule="tattoo_schedule")
 @verify_payload(
     fields_and_types={
         "size": str,
@@ -58,8 +59,8 @@ def create(payload: dict):
 
                 new_tattoo.image_models.append(new_image)
 
-        session.add(new_tattoo)
-        session.commit()
+        # session.add(new_tattoo)
+        # session.commit()
         return jsonify(new_tattoo), HTTPStatus.CREATED
 
     except InvalidValueTypesError as err:
@@ -74,4 +75,3 @@ def create(payload: dict):
             return jsonify(msg), HTTPStatus.CONFLICT
         else:
             raise error
-
