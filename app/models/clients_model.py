@@ -40,7 +40,7 @@ class Client(db.Model):
     image_name = Column(String)
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
-
+    
     @property
     def url_image(self):
         return self.url_image
@@ -49,7 +49,7 @@ class Client(db.Model):
     def url_image(self):
         baseUrl = current_app.config["BASE_URL"]
         endpoint = "/client/image/"
-        url = f"{baseUrl}{endpoint}{self.image_name}"
+        url = f"{baseUrl}{endpoint}{self.image_name_hash}"
         return url
 
     @property
@@ -62,3 +62,11 @@ class Client(db.Model):
 
     def verify_password(self, password_to_compare):
         return check_password_hash(self.password_hash, password_to_compare)
+
+    @property
+    def image_name_hash(self):
+        return self.image_name_hash
+
+    @image_name_hash.getter
+    def image_name_hash(self):
+        return f"{self.image_name}{self.id}"

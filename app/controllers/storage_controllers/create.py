@@ -15,7 +15,7 @@ from app.decorators import verify_payload, validator
         "description": str,
         "validity": str
     },
-    optional_fields=['description']
+    optional=['description']
 )
 @jwt_required()
 def create():
