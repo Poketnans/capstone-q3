@@ -186,19 +186,52 @@ Caso já exista:
 }
 ```
 
-Caso o tipo de um ou mais campos esteja incorreto será lançado um erro com uma lista desses campos. Por exemplo:
+Caso o tipo de um ou mais campos esteja incorreto com relação ao tipo de dado esperado , será lançado um erro com uma lista desses campos. Por exemplo:
 
 O campo name foi enviado como número.
 
 `BAD REQUEST - FORMATO DA RESPOSTA- STATUS 400`
 
-````JSON
+```JSON
 {
   "msg": "invalid keys values ['name']"
 }
-```# capstone-q3
-Projeto Capstone Q3 na Kenzie Academy
-````
+```
+
+Caso um ou mais campos esteja faltando será lançado um erro com uma lista desses campos. Por exemplo:
+
+Os campos phone , street , number , city não foram passados. Obs.: O campo general_information é opcional.
+
+`BAD REQUEST - FORMATO DA RESPOSTA- STATUS 400`
+
+```JSON
+{
+	"msg": "required fields missing ['phone', 'general_information', 'street', 'number', 'city']"
+}
+```
+
+Caso o dado passado não esteja no formato correto será lançado um erro. Por exemplo:
+
+Os campos phone foi passado com mais de 11 numeros.
+
+`BAD REQUEST - FORMATO DA RESPOSTA- STATUS 400`
+
+```JSON
+{
+	"error": "phone in format incorrect"
+}
+```
+
+Caso o password passado não esteja no formato correto será lançado um erro.
+
+`BAD REQUEST - FORMATO DA RESPOSTA- STATUS 400`
+
+```JSON
+{
+	"error": "password in format incorrect",
+	"should be": "Password must contain at least one letter uppercase, one lowercase, one number and one special character"
+}
+```
 
 #### **Client/login POST - Essa rota faz o login do cliente na plataforma**
 
@@ -223,18 +256,48 @@ Caso dê tudo certo, a resposta será assim:
 
 Erros :
 
+Caso o cliente não exista:
+
+`NOT FOUND - FORMATO DA RESPOSTA - STATUS 404`
+
+```JSON
+{
+	"msg": "user not found"
+}
+```
+
+Caso o password passado seja de outro tipo que não seja string:
+
+`BAD REQUEST - FORMATO DA RESPOSTA - STATUS 400`
+
+```JSON
+{
+	"msg": "invalid keys values ['password']"
+}
+```
+
+Caso o email exista porem foi usado o password errado:
+
+`NOT FORBIDDEN - FORMATO DA RESPOSTA - STATUS 403`
+
+```JSON
+{
+	"msg": "wrong password"
+}
+```
+
 ### Rota do Tattuador
 
-#### **Tattoists POST - Essa rota cria o Tattuador**
+#### **Tattoists POST - Essa rota cria o Tatuador**
 
-Nessa aplicação o usuário profissional não registrado pode se cadastrar na plataforma por JSON ou Multipart-form.
+Nessa aplicação o usuário profissional(Tatuador) não registrado pode se cadastrar na plataforma por JSON ou Multipart-form.
 
 Aqui conseguimos ver os parametros para o cadastro:
 
 `POST /tattooists - FORMATO DA REQUISIÇÃO`
 
 **JSON**
-Neste tipo de cadastro o tattuador não faz upload de foto.
+Neste tipo de cadastro o tatuador não faz upload de foto.
 
 ```json
 {
@@ -295,6 +358,51 @@ Caso já exista o email:
 }
 ```
 
+Caso um ou mais campos esteja faltando será lançado um erro com uma lista desses campos. Por exemplo:
+
+Os campos admin não foram passados. Obs.: O campo general_information é opcional.
+
+`BAD REQUEST - FORMATO DA RESPOSTA- STATUS 400`
+
+```JSON
+{
+	"msg": "required fields missing ['admin']"
+}
+```
+
+Caso o tipo de um ou mais campos esteja incorreto com relação ao tipo de dado esperado , será lançado um erro com uma lista desses campos. Por exemplo:
+
+O campo name foi enviado como número.
+
+`BAD REQUEST - FORMATO DA RESPOSTA- STATUS 400`
+
+```JSON
+{
+  "msg": "invalid keys values ['name']"
+}
+```
+
+Caso o password passado não esteja no formato correto será lançado um erro.
+
+`BAD REQUEST - FORMATO DA RESPOSTA- STATUS 400`
+
+```JSON
+{
+	"error": "password in format incorrect",
+	"should be": "Password must contain at least one letter uppercase, one lowercase, one number and one special character"
+}
+```
+
+Caso o email passado não esteja no formato correto será lançado um erro.
+
+`BAD REQUEST - FORMATO DA RESPOSTA- STATUS 400`
+
+```JSON
+{
+	"error": "email in format incorrect"
+}
+```
+
 #### **Tattooists/login POST - Essa rota faz o login do tattuador na plataforma**
 
 `POST /tattooists/login - FORMATO DA REQUISIÇÃO`
@@ -317,6 +425,36 @@ Caso dê tudo certo, a resposta será assim:
 ```
 
 Erros :
+
+Caso o tatuador ainda não tenha cadastro:
+
+`NOT FOUND - FORMATO DA RESPOSTA - STATUS 404`
+
+```JSON
+{
+	"msg": "user not found"
+}
+```
+
+Caso o password passado seja de outro tipo que não seja string:
+
+`BAD REQUEST - FORMATO DA RESPOSTA - STATUS 400`
+
+```JSON
+{
+	"msg": "invalid keys values ['password']"
+}
+```
+
+Caso o email exista porem foi usado o password errado:
+
+`NOT FORBIDDEN - FORMATO DA RESPOSTA - STATUS 403`
+
+```JSON
+{
+	"msg": "wrong password"
+}
+```
 
 ## Rotas que precisam de autenticação
 
@@ -391,3 +529,7 @@ Listar dados do estoque
 Atualiza dados de um item do estoque
 
 `PATCH /storage/<id> - FORMATO DA REQUISIÇÃO`
+
+# capstone-q3
+
+Projeto Capstone Q3 na Kenzie Academy
