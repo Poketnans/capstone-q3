@@ -1,4 +1,3 @@
-
 from http import HTTPStatus
 
 from flask import current_app, jsonify
@@ -9,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.models import Tattooist
 from app.services import get_files, get_orig_error_field
 from app.decorators import verify_payload, validator
+import os
 
 
 @validator(email="email", password="password")
@@ -34,6 +34,11 @@ def post_create(payload):
                 new_tatooist.image_bin = file.file_bin
                 new_tatooist.image_name = file.filename
                 new_tatooist.image_mimetype = file.mimetype
+        else:
+            default_profile_image = os.getenv("PATTERN_IMAGE_ID_TATTOOIST")
+            new_tatooist.image_bin = Tattooist.query.get(default_profile_image).image_bin
+            new_tatooist.image_name = Tattooist.query.get(default_profile_image).image_name_hash
+            new_tatooist.image_mimetype = Tattooist.query.get(default_profile_image).image_mimetype
 
         session.add(new_tatooist)
         session.commit()
