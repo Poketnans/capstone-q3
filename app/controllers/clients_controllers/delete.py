@@ -1,4 +1,4 @@
-from flask import current_app
+from flask import current_app, redirect
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from sqlalchemy.orm import Session
@@ -23,4 +23,4 @@ def delete():
     except werkzeug.exceptions.NotFound as err:
         return err.description, HTTPStatus.NOT_FOUND
 
-    return "", HTTPStatus.NO_CONTENT
+    return redirect("/clients/logout")
