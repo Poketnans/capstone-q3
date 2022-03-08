@@ -61,6 +61,7 @@ def create(payload: dict):
 
         session.add(new_tattoo)
         session.commit()
+        return jsonify(new_tattoo), HTTPStatus.CREATED
 
     except InvalidValueTypesError as err:
         return jsonify(err.description), err.code
@@ -73,4 +74,3 @@ def create(payload: dict):
             msg = {"msg": f"{message[2:-1]} already registered"}
             return jsonify(msg), HTTPStatus.CONFLICT
 
-    return jsonify(new_tattoo), HTTPStatus.CREATED

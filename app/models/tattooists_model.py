@@ -6,6 +6,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.configs.database import db
+from app.classes.app_with_db import current_app
 
 
 @dataclass
@@ -35,8 +36,10 @@ class Tattooist(db.Model):
         return self.url_image
 
     @url_image.getter
-    def url_image(self, text="http://localhost:5000/tattooists/profile_image/"):
-        url = f"{text}{self.image_name}"
+    def url_image(self):
+        baseUrl = current_app.config["BASE_URL"]
+        endpoint = "/tatooists/image/"
+        url = f"{baseUrl}{endpoint}{self.image_name}"
         return url
 
     @property
