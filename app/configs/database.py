@@ -13,4 +13,4 @@ def init_app(app: AppWithDb) -> None:
 
     # Model imports
     from app.models import (Client, Material, Session, Storage, Tattoo,
-                            TattooImage, Tattooist)
+                            TattooImage, Tattooist, TokenBlocklist)
