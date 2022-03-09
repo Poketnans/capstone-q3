@@ -17,7 +17,7 @@ from app.models.tattooists_model import Tattooist
 @verify_payload(
     fields_and_types={
         'new_password': str,
-        "id": str,
+        "id_tattoist": str,
     },
 )
 def to_recover_password(payload):
