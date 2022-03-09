@@ -7,6 +7,8 @@ from app.classes.app_with_db import current_app
 from app.models import Storage, Tattooist
 from app.decorators import verify_payload, validator
 
+from app.errors import NotAnAdmin
+
 
 @validator(date="validity")
 @verify_payload(
@@ -27,10 +29,16 @@ def create(payload):
     try:
         id_tattooist = get_jwt_identity().get("id")
 
-        session.query(Tattooist).filter_by(id=id_tattooist).first_or_404(
+        tatooist: Tattooist = session.query(Tattooist).filter_by(id=id_tattooist).first_or_404(
             description={"msg": "tattooist not found"})
+
+        if not tatooist.admin:
+            raise NotAnAdmin
+
     except werkzeug.exceptions.NotFound as err:
         return err.description, HTTPStatus.CONFLICT
+    except NotAnAdmin:
+        return {"msg": "not unauthorized"}, HTTPStatus.UNAUTHORIZED
 
     new_item = Storage(**payload)
 
