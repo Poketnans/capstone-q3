@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from flask import jsonify, request
+from flask import jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.exc import DataError
 from app.classes.app_with_db import current_app
@@ -18,9 +18,7 @@ from app.decorators import verify_payload, validator
     optional=['description']
 )
 @jwt_required()
-def create():
-
-    payload = request.get_json()
+def create(payload):
 
     session = current_app.db.session
 
