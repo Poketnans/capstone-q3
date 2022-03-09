@@ -4,11 +4,13 @@ from flask import request
 import datetime
 from app.errors.json_not_found import JSONNotFound
 from app.services import get_data
+from datetime import datetime, timedelta, timezone
 
 
 def validator(
     user_name: str = None,
     date: str = None,
+    date_schedule: dict = None,
     phone: str = None,
     cpf: str = None,
     zip_code: str = None,
@@ -22,13 +24,13 @@ def validator(
             Tipos:
 
                 -> Todos os formatos de data são `DD/MM/YYYY`
+                - `date_schedule`: recebe um objeto dois datetime com data e hora uma de inicio e fim. `date_schedule` Verifica se o formato datetime é valido e se o intervalo da data esta correto.
                 - `date`: Verifica se o formato da data é valido e se essa data ainda não passou.
                 - `birthdate`: Verifica se o formato da data é valido.
                 - `zip_code`: Verifica se o formato CEP é valido. O CEP aceita somente nesse formato `60000-000`.
                 - `cpf`: Verifica se o formato da CPF é valido. O CPF aceita somente números `12345678901` ou números separados por ponto `123.456.789.01`.
                 - `email`: Verifica se o formato da email é valido.
                 - `password`: Verifica se o formato do password é valido. O password aceita somente uma letra Maiuscula , uma minuscula, um número e um caracter especial.
-                - `name`: Verifica se o formato de USER_NAME é valido. O USER_NAME aceita somente letras e sem espaço.
                 - `phone`: Verifica se o formato do phone é valido. O phone aceita somente números. Lembrando que só são aceitos números de telefones fixos e móveis válidos no Brasil.
                 - `verify_two`: Verifica se a data atual esta entre este intervalo
 
