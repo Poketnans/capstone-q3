@@ -7,8 +7,10 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.classes.app_with_db import current_app
 from app.decorators import verify_payload
-from app.models import Tattooist, Tattoo
+from app.errors import FieldMissingError, InvalidValueTypesError
+from app.models import Tattooist, Tattoo, Material
 from app.errors import NotAnAdmin
+from app.services import payload_eval
 
 
 @jwt_required()
@@ -17,11 +19,12 @@ from app.errors import NotAnAdmin
         "size": str,
         'colors': bool,
         "body_parts": str,
-        "id_tattoist": str
+        "id_tattoist": str,
+        "materials": list
     },
-    optional=["size", "colors", "body_parts", "id_tattoist"]
+    optional=["size", "colors", "body_parts", "id_tattoist", "materials"]
 )
-def update(id_tattoo, payload):
+def update(id_tattoo, payload: dict):
     try:
         session: Session = current_app.db.session
         tattoist_jwt = get_jwt_identity()
@@ -37,6 +40,18 @@ def update(id_tattoo, payload):
         if not tattoo:
             raise NoResultFound
 
+        materials = payload.pop("materials", None)
+        if materials:
+            materials_fields = {"id_product": str,
+                                "id_tattoo": str, "quantity": int}
+            for material_info in materials:
+                material_payload = payload_eval(
+                    material_info,
+                    **materials_fields
+                )
+                new_material = Material(**material_payload)
+                tattoo.materials.append(new_material)
+
         for key, value in payload.items():
             setattr(tattoo, key, value)
 
@@ -44,6 +59,11 @@ def update(id_tattoo, payload):
         session.commit()
 
         return jsonify(tattoo), HTTPStatus.OK
+
+    except InvalidValueTypesError as err:
+        return jsonify(err.description), err.code
+    except FieldMissingError as err:
+        return jsonify(err.description), err.code
     except NotAnAdmin:
         return {"msg": "user does not have the access rights to do this"}, HTTPStatus.FORBIDDEN
 
