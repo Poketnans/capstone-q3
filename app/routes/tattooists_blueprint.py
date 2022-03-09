@@ -11,6 +11,6 @@ bp_tattooists.get("/<id_tattooist>")(tattooists_controllers.get_specific)
 bp_tattooists.get("")(tattooists_controllers.get_all)
 bp_tattooists.patch("")(tattooists_controllers.update)
 bp_tattooists.delete("")(tattooists_controllers.delete)
-bp_tattooists.get("/image/<image_name>")(tattooists_controllers.get_image)
+bp_tattooists.get("/image/<image_hash>")(tattooists_controllers.get_image)
 
 bp_tattooists.delete("/logout")(logout)
