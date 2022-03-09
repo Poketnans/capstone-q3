@@ -38,11 +38,12 @@ class TattooImage(db.Model):
         return url
 
     @property
-    def image_name(self):
+    def image_name_hash(self):
         raise AttributeError('password cannot be accessed')
 
-    @image_name.setter
-    def password(self, date: str = datetime.utcnow()):
-        md5_hash = hashlib.md5(
+    @image_name_hash.setter
+    def image_name_hash(self, date: str = datetime.utcnow()):
+        print("-> ", self.image_name)
+
+        self.image_name = hashlib.md5(
             f"{self.image_name}{date}".encode("utf-8")).hexdigest()
-        return md5_hash

@@ -50,8 +50,8 @@ def create(payload: dict):
             for file in files:
                 image_payload = {
                     "image_bin": file.file_bin,
-                    "image_name": file.filename,
                     "image_mimetype": file.mimetype,
+                    "image_name_hash": file.filename,
                     "id_tattoo": new_tattoo.id
                 }
 

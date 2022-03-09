@@ -21,5 +21,5 @@ class Storage(db.Model):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     name = Column(String, nullable=False)
     quantity = Column(Integer, nullable=False)
-    description = Column(Text)
+    description = Column(Text, default="no description")
     validity = Column(Date)
