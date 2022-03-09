@@ -24,7 +24,7 @@ class Tattooist(db.Model):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
-    password_hash = Column(String, nullable=False, unique=True)
+    password_hash = Column(String, nullable=False)
     general_information = Column(Text)
     admin = Column(Boolean)
     image_name = Column(String)

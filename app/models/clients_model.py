@@ -31,7 +31,7 @@ class Client(db.Model):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
     birth_date = Column(Date, nullable=False)
-    password_hash = Column(String, nullable=False, unique=True)
+    password_hash = Column(String, nullable=False)
     phone = Column(String, nullable=False, unique=True)
     general_information = Column(Text)
     street = Column(String, nullable=False)
@@ -44,7 +44,7 @@ class Client(db.Model):
     @property
     def url_image(self):
         return self.url_image
-    
+
     @url_image.getter
     def url_image(self):
         baseUrl = current_app.config["BASE_URL"]

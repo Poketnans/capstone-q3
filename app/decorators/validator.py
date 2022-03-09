@@ -3,11 +3,13 @@ from functools import wraps
 from flask import request
 import datetime
 from app.services import get_data
+from datetime import datetime, timedelta, timezone
 
 
 def validator(
     user_name: str = None,
     date: str = None,
+    date_schedule: dict = None,
     phone: str = None,
     cpf: str = None,
     zip_code: str = None,
@@ -21,13 +23,13 @@ def validator(
             Tipos:
 
                 -> Todos os formatos de data são `DD/MM/YYYY`
+                - `date_schedule`: recebe um objeto dois datetime com data e hora uma de inicio e fim. `date_schedule` Verifica se o formato datetime é valido e se o intervalo da data esta correto.
                 - `date`: Verifica se o formato da data é valido e se essa data ainda não passou.
                 - `birthdate`: Verifica se o formato da data é valido.
                 - `zip_code`: Verifica se o formato CEP é valido. O CEP aceita somente nesse formato `60000-000`.
                 - `cpf`: Verifica se o formato da CPF é valido. O CPF aceita somente números `12345678901` ou números separados por ponto `123.456.789.01`.
                 - `email`: Verifica se o formato da email é valido.
                 - `password`: Verifica se o formato do password é valido. O password aceita somente uma letra Maiuscula , uma minuscula, um número e um caracter especial.
-                - `name`: Verifica se o formato de USER_NAME é valido. O USER_NAME aceita somente letras e sem espaço.
                 - `phone`: Verifica se o formato do phone é valido. O phone aceita somente números. Lembrando que só são aceitos números de telefones fixos e móveis válidos no Brasil.
                 - `verify_two`: Verifica se a data atual esta entre este intervalo
 
@@ -36,7 +38,7 @@ def validator(
     '''
     def received_function(function):
         @wraps(function)
-        def wrapper(id: int = 0):
+        def wrapper(id: int = ""):
 
             regex_bithdate = (
                 "^(0[1-9]|[12][0-9]|3[01])[\/\-](0[1-9]|1[012])[\/\-]\d{4}$"
@@ -45,21 +47,41 @@ def validator(
             regex_cep = "^[0-9]{5}-[0-9]{3}$"
             regex_cpf = "^[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\.?[0-9]{2}$"
             regex_email = "^[\w\.]+@([\w-]+\.)+[\w-]{2,4}$"
-
-            # nome usuario somente letras sem espaço e sem numero.
-            regex_name = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\s]+$"
-
-            # uma letra Maiuscula , uma minuscula um numero e um caracter especial
             regex_password = "^((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$"
 
             request_json: dict = get_data()
 
             if request_json.get(date):
-                date_now = datetime.date.today()
-                date_passed = request_json[date]
+                date_now = datetime.datetime.now()
+                pattern = "%d/%m/%Y"
+                date_passed = datetime.datetime.strptime(
+                    request_json[date], pattern)
 
-                if not date_now >= date_passed:
+                if date_now >= date_passed:
                     return {"error": "that date has passed"}, 400
+
+            if request_json.get(date_schedule):
+                pattern = "%d/%m/%Y %H:%M:%S"
+                tattoo_schedule = request_json.get(date_schedule)
+                try:
+                    date_now = datetime.utcnow()
+                    start = tattoo_schedule.get("start")
+                    end = tattoo_schedule.get("end")
+
+                    start = datetime.strptime(
+                        start, pattern)
+                    end = datetime.strptime(end, pattern)
+                    rest_time = end - start
+
+                    if start.date() != end.date():
+                        return {"error": "the dates are not the same day"}, 400
+                    if(start >= end):
+                        return {"error": "date and hour start smaller date and hour end"}, 400
+                    if rest_time < timedelta(hours=1):
+                        return {"error": "Minimum time of 1 hour per tattoo"}, 400
+
+                except ValueError:
+                    return {"error": "date in format incorrect"}, 400
 
             if request_json.get(birthdate):
                 if not match(regex_bithdate, request_json[birthdate]):
@@ -87,10 +109,6 @@ def validator(
                         "error": "password in format incorrect",
                         "should be": "Password must contain at least one letter uppercase, one lowercase, one number and one special character",
                     }, 400
-
-            if request_json.get(user_name):
-                if not match(regex_name, request_json[user_name]):
-                    return {"error": "name in format incorrect"}, 400
 
             if id:
                 return function(id)
