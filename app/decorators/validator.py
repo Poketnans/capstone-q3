@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from re import match
 from functools import wraps
 from flask import request
@@ -55,8 +56,16 @@ def validator(
                 if request_json.get(date):
                     date_now = datetime.now()
                     pattern = "%d/%m/%Y"
-                    date_passed = datetime.strptime(
-                        request_json[date], pattern)
+
+                    try:
+                        date_passed = datetime.strptime(
+                            request_json[date], pattern)
+
+                    except ValueError as err:
+                        resp = {
+                            'msg': 'Invalid date format. Try DD/MM/YYY'
+                        }
+                        return resp, HTTPStatus.BAD_REQUEST
 
                     if date_now >= date_passed:
                         return {"error": "that date has passed"}, 400
