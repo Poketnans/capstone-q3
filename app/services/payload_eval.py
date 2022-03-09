@@ -1,7 +1,7 @@
 from app.errors import FieldMissingError, InvalidValueTypesError
 
 
-def payload_eval(data: dict, optional: list = [], **kwargs) -> dict:
+def payload_eval(data: dict, optional: list = [], not_empty_string: list = [], **kwargs) -> dict:
     ''' Avalia o payload em existência, opcionalidade e tipo de campo. Retorna\n
         um dicionário contendo os campos que foram informados como argumentos\n
         nomeados, ou seja, ignora os campos excedentes.
@@ -32,6 +32,16 @@ def payload_eval(data: dict, optional: list = [], **kwargs) -> dict:
             `app.errors.InvalidValueTypesError` - Há campos cujo tipo não\n
         não coresponde ao informado nos argumentos nomeados.
         '''
+
+    # Verifica se um campo string possui um valor vazio e substitui por None
+    # caso esse campo seja informado na lista not_nullable
+    data = {
+        key: value if type(value) != str
+        else value if key not in not_empty_string
+        else value if value != "" else None
+        for key, value in data.items()
+    }
+
     missing_keys = [
         key
         for key in kwargs.keys()
