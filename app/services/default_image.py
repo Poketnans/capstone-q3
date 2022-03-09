@@ -1,6 +1,6 @@
 from PIL import Image
 
-from app.classes.app_with_db import ImageFile
+from app.classes.image_file import ImageFile
 
 
 def generate_image_default() -> ImageFile:
@@ -17,8 +17,9 @@ def generate_image_default() -> ImageFile:
 
     with open(url_image, "rb") as file:
         image_bin: str = file.read()
-    return {
+    image = ImageFile(**{
         "image_name": image_filename,
         "image_bin": image_bin,
         "image_mimetype": image_mimetype
-    }
+    })
+    return image
