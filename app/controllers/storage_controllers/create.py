@@ -1,9 +1,10 @@
 from http import HTTPStatus
 from flask import jsonify
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.exc import DataError
+import werkzeug
 from app.classes.app_with_db import current_app
-from app.models import Storage
+from app.models import Storage, Tattooist
 from app.decorators import verify_payload, validator
 
 
@@ -15,7 +16,8 @@ from app.decorators import verify_payload, validator
         "description": str,
         "validity": str
     },
-    optional=['description']
+    optional=['description'],
+    not_empty_string=['name', 'validity']
 )
 @jwt_required()
 def create(payload):
@@ -23,16 +25,16 @@ def create(payload):
     session = current_app.db.session
 
     try:
+        id_tattooist = get_jwt_identity().get("id")
 
-        new_item = Storage(**payload)
+        session.query(Tattooist).filter_by(id=id_tattooist).first_or_404(
+            description={"msg": "tattooist not found"})
+    except werkzeug.exceptions.NotFound as err:
+        return err.description, HTTPStatus.CONFLICT
 
-        session.add(new_item)
-        session.commit()
+    new_item = Storage(**payload)
 
-    except DataError as err:
-        resp = {
-            'msg': 'Invalid date format. Try DD/MM/YYY'
-        }
-        return jsonify(resp), HTTPStatus.CONFLICT
+    session.add(new_item)
+    session.commit()
 
     return jsonify(new_item), HTTPStatus.CREATED
