@@ -1,6 +1,4 @@
 from dataclasses import dataclass
-from datetime import datetime
-import hashlib
 from uuid import uuid4
 
 from sqlalchemy import Column, ForeignKey, LargeBinary, String
@@ -36,13 +34,3 @@ class TattooImage(db.Model):
         endpoint = "/tattoos/image/"
         url = f"{baseUrl}{endpoint}{self.image_name}"
         return url
-
-    @property
-    def image_name(self):
-        return self.image_name
-
-    @image_name.setter
-    def image_name(self, key: str = datetime.utcnow()):
-        filename_hash = hashlib.md5(
-            f"{self.image_name}{key}".encode()).hexdigest()
-        return filename_hash
