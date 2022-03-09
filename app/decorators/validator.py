@@ -2,6 +2,7 @@ from re import match
 from functools import wraps
 from flask import request
 import datetime
+from app.errors.json_not_found import JSONNotFound
 from app.services import get_data
 from datetime import datetime, timedelta, timezone
 
@@ -38,77 +39,55 @@ def validator(
     '''
     def received_function(function):
         @wraps(function)
-        def wrapper(id: int = ""):
+        def wrapper(id: int = 0):
+            try:
+                regex_bithdate = (
+                    "^(0[1-9]|[12][0-9]|3[01])[\/\-](0[1-9]|1[012])[\/\-]\d{4}$"
+                )
+                regex_phone = "^[1-9]{2}(?:[2-8]|9[0-9])[0-9]{3}[0-9]{4}$"
+                regex_cep = "^[0-9]{5}-[0-9]{3}$"
+                regex_cpf = "^[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\.?[0-9]{2}$"
+                regex_email = "^[\w\.]+@([\w-]+\.)+[\w-]{2,4}$"
+                regex_password = "^((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$"
 
-            regex_bithdate = (
-                "^(0[1-9]|[12][0-9]|3[01])[\/\-](0[1-9]|1[012])[\/\-]\d{4}$"
-            )
-            regex_phone = "^[1-9]{2}(?:[2-8]|9[0-9])[0-9]{3}[0-9]{4}$"
-            regex_cep = "^[0-9]{5}-[0-9]{3}$"
-            regex_cpf = "^[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\.?[0-9]{2}$"
-            regex_email = "^[\w\.]+@([\w-]+\.)+[\w-]{2,4}$"
-            regex_password = "^((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$"
+                request_json: dict = get_data()
 
-            request_json: dict = get_data()
+                if request_json.get(date):
+                    date_now = datetime.date.today()
+                    date_passed = request_json[date]
 
-            if request_json.get(date):
-                date_now = datetime.datetime.now()
-                pattern = "%d/%m/%Y"
-                date_passed = datetime.datetime.strptime(
-                    request_json[date], pattern)
+                    if not date_now >= date_passed:
+                        return {"error": "that date has passed"}, 400
 
-                if date_now >= date_passed:
-                    return {"error": "that date has passed"}, 400
+                if request_json.get(birthdate):
+                    if not match(regex_bithdate, request_json[birthdate]):
+                        return {"error": "birthdate in format incorrect"}, 400
 
-            if request_json.get(date_schedule):
-                pattern = "%d/%m/%Y %H:%M:%S"
-                tattoo_schedule = request_json.get(date_schedule)
-                try:
-                    date_now = datetime.utcnow()
-                    start = tattoo_schedule.get("start")
-                    end = tattoo_schedule.get("end")
+                if request_json.get(phone):
+                    if not match(regex_phone, request_json[phone]):
+                        return {"error": "phone in format incorrect"}, 400
 
-                    start = datetime.strptime(
-                        start, pattern)
-                    end = datetime.strptime(end, pattern)
-                    rest_time = end - start
+                if request_json.get(cpf):
+                    if not match(regex_cpf, request_json[cpf]):
+                        return {"error": "cpf in format incorrect"}, 400
 
-                    if start.date() != end.date():
-                        return {"error": "the dates are not the same day"}, 400
-                    if(start >= end):
-                        return {"error": "date and hour start smaller date and hour end"}, 400
-                    if rest_time < timedelta(hours=1):
-                        return {"error": "Minimum time of 1 hour per tattoo"}, 400
+                if request_json.get(zip_code):
+                    if not match(regex_cep, request_json[zip_code]):
+                        return {"error": "cep in format incorrect"}, 400
 
-                except ValueError:
-                    return {"error": "date in format incorrect"}, 400
+                if request_json.get(email):
+                    if not match(regex_email, request_json[email]):
+                        return {"error": "email in format incorrect"}, 400
 
-            if request_json.get(birthdate):
-                if not match(regex_bithdate, request_json[birthdate]):
-                    return {"error": "birthdate in format incorrect"}, 400
+                if request_json.get(password):
+                    if not match(regex_password, request_json[password]):
+                        return {
+                            "error": "password in format incorrect",
+                            "should be": "Password must contain at least one letter uppercase, one lowercase, one number and one special character",
+                        }, 400
 
-            if request_json.get(phone):
-                if not match(regex_phone, request_json[phone]):
-                    return {"error": "phone in format incorrect"}, 400
-
-            if request_json.get(cpf):
-                if not match(regex_cpf, request_json[cpf]):
-                    return {"error": "cpf in format incorrect"}, 400
-
-            if request_json.get(zip_code):
-                if not match(regex_cep, request_json[zip_code]):
-                    return {"error": "cep in format incorrect"}, 400
-
-            if request_json.get(email):
-                if not match(regex_email, request_json[email]):
-                    return {"error": "email in format incorrect"}, 400
-
-            if request_json.get(password):
-                if not match(regex_password, request_json[password]):
-                    return {
-                        "error": "password in format incorrect",
-                        "should be": "Password must contain at least one letter uppercase, one lowercase, one number and one special character",
-                    }, 400
+            except JSONNotFound as err:
+                return {"msg": f"{err.describe}"}, err.status_code
 
             if id:
                 return function(id)

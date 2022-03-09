@@ -24,4 +24,5 @@ def get_data(exception: bool = True, key_form: str = "data") -> "dict or None":
             data.pop("file")
     elif exception:
         raise JSONNotFound
+
     return data
