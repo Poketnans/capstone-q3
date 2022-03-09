@@ -31,7 +31,7 @@ def to_recover_password(payload):
             raise NotAnAdmin
 
         session: Session = current_app.db.session
-        client: Client = Client.query.filter_by(id=id).first_or_404(
+        client: Client = Client.query.filter_by(id=payload['id_client']).first_or_404(
             description={"msg": "client not found"})
 
         client.password = payload['password']
