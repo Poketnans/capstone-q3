@@ -46,9 +46,6 @@ def create(payload: dict):
         new_tattoo.tattoo_schedule = new_session
 
         files = get_files()
-        
-        if len(files) == 0:
-            raise AttributeError
 
         if files:
             for file in files:
@@ -62,6 +59,9 @@ def create(payload: dict):
                 new_image = TattooImage(**image_payload)
 
                 new_tattoo.image_models.append(new_image)
+        else:
+            raise AttributeError
+
         session.add(new_tattoo)
         session.commit()
         return jsonify(new_tattoo), HTTPStatus.CREATED
