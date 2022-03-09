@@ -11,7 +11,5 @@ bp_clients.get("/clients")(get_all)
 bp_clients.delete("/clients")(delete)
 bp_clients.get("/client/image/<image_hash>")(get_image)
 bp_clients.patch("/clients")(update)
-bp_clients.patch("/clients")(update)
-
 bp_clients.post("/clients/to_recover")(to_recover_password)
 bp_clients.delete("/clients/logout")(logout)

@@ -9,6 +9,7 @@ from app.errors import JSONNotFound, InvalidValueTypesError
 from app.models import Client
 from app.services import get_files
 from app.decorators import validator,verify_payload
+from ipdb import set_trace
 
 
 @jwt_required()
@@ -30,23 +31,17 @@ def update(payload):
         session: Session = current_app.db.session
         client_jwt = get_jwt_identity()
         id = client_jwt['id']
-
         client: Client = Client.query.get(id)
         if not client:
             raise NoResultFound
-        
         for key, value in payload.items():
             setattr(client, key, value)
-
         files = get_files()
         if files:
             for file in files:
                 client.image_bin = file.file_bin
                 client.image_name = file.filename
                 client.image_mimetype = file.mimetype
-        if not files:
-            raise JSONNotFound
-
         session.add(client)
         session.commit()
 
