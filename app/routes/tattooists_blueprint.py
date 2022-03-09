@@ -12,5 +12,4 @@ bp_tattooists.get("")(tattooists_controllers.get_all)
 bp_tattooists.patch("")(tattooists_controllers.update)
 bp_tattooists.delete("")(tattooists_controllers.delete)
 bp_tattooists.get("/image/<image_hash>")(tattooists_controllers.get_image)
-
 bp_tattooists.delete("/logout")(logout)
