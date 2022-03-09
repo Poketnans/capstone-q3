@@ -6,6 +6,7 @@ from sqlalchemy.dialects.postgresql import UUID
 
 from app.configs.database import db
 from app.classes.app_with_db import current_app
+import hashlib
 
 @dataclass
 class TattooImage(db.Model):
@@ -31,5 +32,13 @@ class TattooImage(db.Model):
     def url_image(self):
         baseUrl = current_app.config["BASE_URL"]
         endpoint = "/tattoos/image/"
-        url = f"{baseUrl}{endpoint}{self.image_name}"
+        url = f"{baseUrl}{endpoint}{self.image_hash}"
         return url
+
+    @property
+    def image_hash(self):
+        return self.image_hash
+
+    @image_hash.getter
+    def image_hash(self):
+        return hashlib.md5(f"{self.image_name}{self.id}".encode()).hexdigest()

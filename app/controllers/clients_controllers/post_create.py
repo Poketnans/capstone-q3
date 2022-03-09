@@ -9,6 +9,8 @@ from app.models.clients_model import Client
 from app.decorators import verify_payload, validator
 from app.services import get_files
 import os
+import hashlib
+from ipdb import set_trace
 
 
 @validator(password="password", birthdate="birth_date", phone="phone", email="email")
@@ -31,15 +33,15 @@ def post_create(payload):
 
     try:
         new_client = Client(**payload)
-
+        
         files = get_files()
         if files:
             for file in files:
                 new_client.image_bin = file.file_bin
-                new_client.image_name = file.filename
+                new_client.image_hash = file.filename
                 new_client.image_mimetype = file.mimetype
         else:
-            default_profile_image = os.getenv("PATTERN_IMAGE_ID_CLIENT")
+            default_profile_image = os.getenv("DEFAULT_IMAGE_ID_CLIENT")
             new_client.image_bin = Client.query.get(default_profile_image).image_bin
             new_client.image_name = Client.query.get(default_profile_image).image_name
             new_client.image_mimetype = Client.query.get(default_profile_image).image_mimetype
