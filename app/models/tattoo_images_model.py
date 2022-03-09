@@ -43,7 +43,5 @@ class TattooImage(db.Model):
 
     @image_name_hash.setter
     def image_name_hash(self, date: str = datetime.utcnow()):
-        print("-> ", self.image_name)
-
         self.image_name = hashlib.md5(
             f"{self.image_name}{date}".encode("utf-8")).hexdigest()

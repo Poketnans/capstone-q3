@@ -59,9 +59,8 @@ def create(payload: dict):
 
                 new_tattoo.image_models.append(new_image)
 
-        # session.add(new_tattoo)
-        # session.commit()
-        print("Tatoo -> ", new_tattoo)
+        session.add(new_tattoo)
+        session.commit()
         return jsonify(new_tattoo), HTTPStatus.CREATED
 
     except InvalidValueTypesError as err:
