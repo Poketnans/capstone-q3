@@ -41,7 +41,7 @@ class Tattooist(db.Model):
     @url_image.getter
     def url_image(self):
         baseUrl = current_app.config["BASE_URL"]
-        endpoint = "/tatooists/image/"
+        endpoint = "/tattooists/image/"
         url = f"{baseUrl}{endpoint}{self.image_name}"
         return url
 
