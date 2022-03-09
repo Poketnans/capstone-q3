@@ -34,5 +34,9 @@ def to_recover_password(payload):
         session.commit()
 
         return "", HTTPStatus.NO_CONTENT
+    
+    except AttributeError as e:
+        return {"msg": "user not found"}, HTTPStatus.NOT_FOUND
+    
     except NotAnAdmin as e:
         return {"msg": "not unauthorized"}, HTTPStatus.UNAUTHORIZED
