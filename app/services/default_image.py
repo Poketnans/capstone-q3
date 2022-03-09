@@ -7,7 +7,7 @@ def generate_image_default() -> ImageFile:
     '''
         Gera uma imagem automaticamente para a instancia da classe e retorna um objeto de `ImageFile` com image_mimetype,image_bin e image_filename.
     '''
-    url_image = "../assets/image_default.png"
+    url_image = "./app/assets/image_default.png"
     image_mimetype: str = None
     image_bin = None
     image_filename = "filename"
@@ -18,8 +18,8 @@ def generate_image_default() -> ImageFile:
     with open(url_image, "rb") as file:
         image_bin: str = file.read()
     image = ImageFile(**{
-        "image_name": image_filename,
-        "image_bin": image_bin,
-        "image_mimetype": image_mimetype
+        "filename": image_filename,
+        "file_bin": image_bin,
+        "mimetype": image_mimetype
     })
     return image
