@@ -9,7 +9,6 @@ from app.errors import JSONNotFound, InvalidValueTypesError
 from app.models import Client
 from app.services import get_files
 from app.decorators import validator,verify_payload
-from ipdb import set_trace
 
 
 @jwt_required()
