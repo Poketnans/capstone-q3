@@ -53,11 +53,36 @@ def validator(
                 request_json: dict = get_data()
 
                 if request_json.get(date):
-                    date_now = datetime.date.today()
-                    date_passed = request_json[date]
+                    date_now = datetime.now()
+                    pattern = "%d/%m/%Y"
+                    date_passed = datetime.strptime(
+                        request_json[date], pattern)
 
-                    if not date_now >= date_passed:
+                    if date_now >= date_passed:
                         return {"error": "that date has passed"}, 400
+
+                if request_json.get(date_schedule):
+                    pattern = "%d/%m/%Y %H:%M:%S"
+                    tattoo_schedule = request_json.get(date_schedule)
+                    try:
+                        date_now = datetime.utcnow()
+                        start = tattoo_schedule.get("start")
+                        end = tattoo_schedule.get("end")
+
+                        start = datetime.strptime(
+                            start, pattern)
+                        end = datetime.strptime(end, pattern)
+                        rest_time = end - start
+
+                        if start.date() != end.date():
+                            return {"error": "the dates are not the same day"}, 400
+                        if(start >= end):
+                            return {"error": "date and hour start smaller date and hour end"}, 400
+                        if rest_time < timedelta(hours=1):
+                            return {"error": "Minimum time of 1 hour per tattoo"}, 400
+
+                    except ValueError:
+                        return {"error": "date in format incorrect"}, 400
 
                 if request_json.get(birthdate):
                     if not match(regex_bithdate, request_json[birthdate]):
