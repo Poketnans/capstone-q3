@@ -19,7 +19,9 @@ class Tattooist(db.Model):
     general_information: str
     admin: str
     url_image: str = None
-
+    image_hash = None
+    image_name: str = None
+    
     __tablename__ = "tattooists"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
@@ -40,7 +42,7 @@ class Tattooist(db.Model):
     def url_image(self):
         baseUrl = current_app.config["BASE_URL"]
         endpoint = "/tatooists/image/"
-        url = f"{baseUrl}{endpoint}{self.image_hash}"
+        url = f"{baseUrl}{endpoint}{self.image_name}"
         return url
 
     @property
@@ -56,8 +58,9 @@ class Tattooist(db.Model):
 
     @property
     def image_hash(self):
-        return self.image_hash
+        return self.image_name
 
-    @image_hash.getter
-    def image_hash(self):
-        return hashlib.md5(f"{self.image_name}{self.id}".encode()).hexdigest()
+    @image_hash.setter
+    def image_hash(self, image_name_to_hash):
+        hash = hashlib.md5(f"{image_name_to_hash}{self.email}".encode()).hexdigest()
+        self.image_name = hash

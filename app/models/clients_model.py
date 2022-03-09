@@ -25,8 +25,8 @@ class Client(db.Model):
     city: str
     url_image: str = None
     tattoos: list = None
-    image_name: str = ""
-    _image_name = None
+    image_name: str = None
+    image_hash = None
     
     __tablename__ = "clients"
 
@@ -40,7 +40,7 @@ class Client(db.Model):
     street = Column(String, nullable=False)
     number = Column(Integer, nullable=False)
     city = Column(String, nullable=False)
-    image_name = Column(String, default=_image_name)
+    image_name = Column(String)
     image_bin = Column(LargeBinary)
     image_mimetype = Column(String)
 

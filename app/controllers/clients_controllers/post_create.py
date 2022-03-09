@@ -9,8 +9,6 @@ from app.models.clients_model import Client
 from app.decorators import verify_payload, validator
 from app.services import get_files
 import os
-import hashlib
-from ipdb import set_trace
 
 
 @validator(password="password", birthdate="birth_date", phone="phone", email="email")

@@ -32,7 +32,7 @@ def post_create(payload):
         if files:
             for file in files:
                 new_tatooist.image_bin = file.file_bin
-                new_tatooist.image_name = file.filename
+                new_tatooist.image_hash = file.filename
                 new_tatooist.image_mimetype = file.mimetype
         else:
             default_profile_image = os.getenv("DEFAULT_IMAGE_ID_TATTOOIST")
