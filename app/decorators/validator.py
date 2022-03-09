@@ -57,21 +57,20 @@ def validator(
 
                 if not date_now >= date_passed:
                     return {"error": "that date has passed"}, 400
+
             if request_json.get(date_schedule):
                 pattern = "%d/%m/%Y %H:%M:%S"
-
+                tattoo_schedule = request_json.get(date_schedule)
                 try:
-
                     date_now = datetime.utcnow()
-                    start = request_json.get(date_schedule).get("start")
-                    end = request_json.get(date_schedule).get("end")
+                    start = tattoo_schedule.get("start")
+                    end = tattoo_schedule.get("end")
 
                     start = datetime.strptime(
                         start, pattern)
                     end = datetime.strptime(end, pattern)
                     rest_time = end - start
 
-                    print("DATA : ", start.date())
                     if start.date() != end.date():
                         return {"error": "the dates are not the same day"}, 400
                     if(start >= end):
