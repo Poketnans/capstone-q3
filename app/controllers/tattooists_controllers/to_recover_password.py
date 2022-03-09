@@ -21,22 +21,28 @@ from app.models.tattooists_model import Tattooist
     },
 )
 def to_recover_password(payload):
+    
     try:
         id = get_jwt_identity().get("id")
 
-        tatooist: Tattooist = Tattooist.query.get(id)
+        tatooist: Tattooist = Tattooist.query.filter_by(id=id).first_or_404(
+            description={"msg": "Tatooist not found"})
+            
         if not tatooist.admin:
             raise NotAnAdmin
 
         session: Session = current_app.db.session
-        tattoist: Tattooist = Tattooist.query.get(payload['id'])
+        tattoist: Tattooist = Tattooist.query.filter_by(id=payload['id_tattooist']).first_or_404(
+            description={"msg": "Tattooist not found"})
+
         tattoist.password = payload['new_password']
         session.commit()
 
         return "", HTTPStatus.NO_CONTENT
-    
-    except AttributeError as e:
-        return {"msg": "user not found"}, HTTPStatus.NOT_FOUND
-    
+       
     except NotAnAdmin as e:
         return {"msg": "not unauthorized"}, HTTPStatus.UNAUTHORIZED
+    
+    except werkzeug.exceptions.NotFound as err:
+        return err.description, HTTPStatus.NOT_FOUND
+    
