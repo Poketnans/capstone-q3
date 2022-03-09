@@ -37,7 +37,7 @@ def post_create(payload):
         else:
             default_profile_image = os.getenv("DEFAULT_IMAGE_ID_TATTOOIST")
             new_tatooist.image_bin = Tattooist.query.get(default_profile_image).image_bin
-            new_tatooist.image_name = Tattooist.query.get(default_profile_image).image_name_hash
+            new_tatooist.image_hash = Tattooist.query.get(default_profile_image).image_name_hash
             new_tatooist.image_mimetype = Tattooist.query.get(default_profile_image).image_mimetype
 
         session.add(new_tatooist)
