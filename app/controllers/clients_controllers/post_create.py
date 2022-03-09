@@ -7,8 +7,7 @@ from sqlalchemy.orm import Session
 from app.classes.app_with_db import current_app
 from app.models.clients_model import Client
 from app.decorators import verify_payload, validator
-from app.services import get_files
-import os
+from app.services import get_files, generate_image_default
 
 
 @validator(password="password", birthdate="birth_date", phone="phone", email="email")
@@ -39,11 +38,11 @@ def post_create(payload):
                 new_client.image_hash = file.filename
                 new_client.image_mimetype = file.mimetype
         else:
-            default_profile_image = os.getenv("DEFAULT_IMAGE_ID_CLIENT")
-            new_client.image_bin = Client.query.get(default_profile_image).image_bin
-            new_client.image_hash = Client.query.get(default_profile_image).image_name
-            new_client.image_mimetype = Client.query.get(default_profile_image).image_mimetype
-            
+            image = generate_image_default()
+            new_client.image_mimetype = image.mimetype
+            new_client.image_hash = image.filename
+            new_client.image_bin = image.file_bin
+
         session.add(new_client)
         session.commit()
 

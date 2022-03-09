@@ -8,6 +8,7 @@ from app.configs.database import db
 from app.classes.app_with_db import current_app
 import hashlib
 
+
 @dataclass
 class TattooImage(db.Model):
 
@@ -23,7 +24,7 @@ class TattooImage(db.Model):
     image_mimetype = Column(String, nullable=False)
 
     id_tattoo = Column(UUID(as_uuid=True), ForeignKey("tattoos.id"))
-    
+
     @property
     def url_image(self):
         return self.url_image

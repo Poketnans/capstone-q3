@@ -6,9 +6,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models import Tattooist
-from app.services import get_files, get_orig_error_field
+from app.services import get_files, get_orig_error_field, generate_image_default
 from app.decorators import verify_payload, validator
-import os
 
 
 @validator(email="email", password="password")
@@ -35,10 +34,10 @@ def post_create(payload):
                 new_tatooist.image_hash = file.filename
                 new_tatooist.image_mimetype = file.mimetype
         else:
-            default_profile_image = os.getenv("DEFAULT_IMAGE_ID_TATTOOIST")
-            new_tatooist.image_bin = Tattooist.query.get(default_profile_image).image_bin
-            new_tatooist.image_hash = Tattooist.query.get(default_profile_image).image_name_hash
-            new_tatooist.image_mimetype = Tattooist.query.get(default_profile_image).image_mimetype
+            image = generate_image_default()
+            new_tatooist.image_mimetype = image.mimetype
+            new_tatooist.image_hash = image.filename
+            new_tatooist.image_bin = image.file_bin
 
         session.add(new_tatooist)
         session.commit()
