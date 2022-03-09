@@ -52,10 +52,12 @@ def validator(
             request_json: dict = get_data()
 
             if request_json.get(date):
-                date_now = datetime.date.today(timezone.utc)
-                date_passed = request_json[date]
+                date_now = datetime.datetime.now()
+                pattern = "%d/%m/%Y"
+                date_passed = datetime.datetime.strptime(
+                    request_json[date], pattern)
 
-                if not date_now >= date_passed:
+                if date_now >= date_passed:
                     return {"error": "that date has passed"}, 400
 
             if request_json.get(date_schedule):
