@@ -13,4 +13,5 @@ bp_tattooists.patch("")(tattooists_controllers.update)
 bp_tattooists.delete("")(tattooists_controllers.delete)
 bp_tattooists.get("/image/<image_name>")(tattooists_controllers.get_image)
 
+bp_tattooists.post("/to_recover")(tattooists_controllers.to_recover_password)
 bp_tattooists.delete("/logout")(logout)
