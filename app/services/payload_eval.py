@@ -46,6 +46,7 @@ def payload_eval(data: dict, optional: list = [], not_empty_string: list = [], *
         key
         for key in kwargs.keys()
         if key not in data.keys()
+        if key not in optional
     ]
 
     if set(missing_keys).difference(optional):
