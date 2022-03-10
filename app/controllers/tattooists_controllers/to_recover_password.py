@@ -3,6 +3,7 @@ from http import HTTPStatus
 from flask import current_app
 
 from sqlalchemy.orm import Session
+import werkzeug
 
 from app.errors import NotAnAdmin
 from app.models import Tattooist
@@ -17,17 +18,17 @@ from app.models.tattooists_model import Tattooist
 @verify_payload(
     fields_and_types={
         'new_password': str,
-        "id_tattoist": str,
+        "id_tattooist": str,
     },
 )
 def to_recover_password(payload):
-    
+
     try:
         id = get_jwt_identity().get("id")
 
         tatooist: Tattooist = Tattooist.query.filter_by(id=id).first_or_404(
             description={"msg": "Tatooist not found"})
-            
+
         if not tatooist.admin:
             raise NotAnAdmin
 
@@ -39,10 +40,9 @@ def to_recover_password(payload):
         session.commit()
 
         return "", HTTPStatus.NO_CONTENT
-       
+
     except NotAnAdmin as e:
         return {"msg": "not unauthorized"}, HTTPStatus.UNAUTHORIZED
-    
+
     except werkzeug.exceptions.NotFound as err:
         return err.description, HTTPStatus.NOT_FOUND
-    
