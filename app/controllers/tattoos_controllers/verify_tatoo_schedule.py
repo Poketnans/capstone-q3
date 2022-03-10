@@ -11,6 +11,9 @@ def verify_tatoo_schedule(mark_tatoo_schedule: Session, list_tatoo_schedule: lis
         start = datetime.strptime(mark_tatoo_schedule.start, pattern)
         end = datetime.strptime(mark_tatoo_schedule.end, pattern)
 
-        if not(start > start_db and start > end_db or start < start_db and start < end_db):
+        if not(start > start_db and start > end_db or end < start_db and start < end_db):
+            print("")
+            print("Não passou")
+            print("")
             return False
     return True
