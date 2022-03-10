@@ -20,7 +20,6 @@ class Tattoo(db.Model):
     image_models: list
     tattooist: dict
     tattoo_schedule: dict
-    #session: list
 
     __tablename__ = "tattoos"
 
