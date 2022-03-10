@@ -25,7 +25,6 @@ class Client(db.Model):
     city: str
     url_image: str = None
     tattoos: list = None
-    image_name: str = None
     image_hash = None
 
     __tablename__ = "clients"
