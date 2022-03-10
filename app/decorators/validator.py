@@ -91,7 +91,7 @@ def validator(
                             return {"error": "Minimum time of 1 hour per tattoo"}, 400
 
                     except ValueError:
-                        return {"error": "date in format incorrect"}, 400
+                        return {"error": "datetime in the wrong format, it must be in that format dd/mm/YYYY H:M:S"}, 400
 
                 if request_json.get(birthdate):
                     if not match(regex_bithdate, request_json[birthdate]):
