@@ -100,11 +100,41 @@ flask run
 
 # Endpoints
 
-## Rotas que não precisa de autenticação
+| Endpoints | Methods | Rule |
+| :--- | :--- | :--- |
+| clients.post_create | POST | /clients |
+| clients.post_login | POST | /clients/login |
+| tattooists.post_create | POST | /tattoists |
+| tattooists.post_login | POST | /tattooists/login |
+| clients.get_all | GET | /clients |
+| clients.get_specific | GET | /client |
+| clients.get_image | GET | /client/image/<image_hash> |
+| clients.update | PATCH | /clients |
+| clients.delete | DELETE | /clients |
+| clients.logout | DELETE | /clients/logout |
+| clients.to_recover_password | POST | /clients/to_recover |
+| tattooists.get_all | GET | /tattooists |
+| tattooists.get_specific | GET | /tattooists/<id_tattooist> |
+| tattoists.get_image | GET | /tattooists/image/<image_hash> |
+| tattoists.update | PATCH | /tattooists |
+| tattooists.delete | DELETE | /tattooists |
+| tattooists.logout | DELETE | /tattooists/logout |
+| tattooists.to_recover_password | POST | /tattooists/to_recover |
+| tattoos.post_create | POST | /tattoos |
+| tattoos.get_all | GET | /tattoos |
+| tattoos.get_specific | GET | /tattoos/<id_tattoo> |
+| tattoos.get_image | GET | /tattoos/image/<image_hash> |
+| tattoos.update | PATCH | /tattoos/<id_tattoo> |
+| storage.post | POST | /storage |
+| storage.get_all | GET | /storage |
+| storage.update | PATCH | /storage/<id> |
+
+## Rotas que não precisam de autenticação
 
 ### Rotas de Cliente
-
-#### **Client POST - Essa rota cria o Cliente**
+<br>
+<details>
+  <summary><b>POST /clients - Essa rota cria o cliente</b></summary>
 
 Nessa aplicação o usuário não registrado pode se cadastrar na plataforma por JSON ou Multipart-form.
 
@@ -232,8 +262,10 @@ Caso o password passado não esteja no formato correto será lançado um erro.
 	"should be": "Password must contain at least one letter uppercase, one lowercase, one number and one special character"
 }
 ```
-
-#### **Client/login POST - Essa rota faz o login do cliente na plataforma**
+</details>
+<br>
+<details>
+  <summary><b>POST /clients/login - Essa rota faz o login do cliente na plataforma</b></summary>
 
 `POST /clients/login - FORMATO DA REQUISIÇÃO`
 
@@ -285,10 +317,15 @@ Caso o email exista porem foi usado o password errado:
 	"msg": "wrong password"
 }
 ```
+</details>
+<br>
 
 ### Rota Tattooist
-
-#### **Tattoists POST - Essa rota cria o Tatuador**
+<br>
+<details>
+  <summary>
+    <b>POST /tattooists - Essa rota cria o tatuador</b>
+  </summary>
 
 Nessa aplicação o usuário profissional(Tatuador) não registrado pode se cadastrar na plataforma por JSON ou Multipart-form.
 
@@ -402,8 +439,12 @@ Caso o email passado não esteja no formato correto será lançado um erro.
 	"error": "email in format incorrect"
 }
 ```
-
-#### **Tattooists/login POST - Essa rota faz o login do tattuador na plataforma**
+</details>
+<br>
+<details>
+  <summary>
+    <b>POST /tattooists/login - Essa rota faz o login do tatuador na plataforma</br>
+  </summary>
 
 `POST /tattooists/login - FORMATO DA REQUISIÇÃO`
 
@@ -455,12 +496,15 @@ Caso o email exista porem foi usado o password errado:
 	"msg": "wrong password"
 }
 ```
+</details>
+<br>
 
 ## Rotas que precisam de autenticação atraves do token
 
 ### Rota do Cliente
-
-- **Listar todos os Clientes**
+<br>
+<details>
+<summary>GET /clients - Essa rota retorna todos os clientes cadastrados no banco</summary>
 
 `GET /clients - FORMATO DA REQUISIÇÃO`
 
@@ -539,8 +583,10 @@ Caso o token tenha expirado será lançado um erro:
 	"msg": "Token has expired"
 }
 ```
-
-- **Capturar dados de um Client**
+</details>
+<br>
+<details>
+<summary><b>GET /client - Essa rota retorna dado de apenas um cliente</b></summary>
 
 `GET /client - FORMATO DA REQUISIÇÃO`
 
@@ -588,31 +634,46 @@ Caso não esteja autenticado será lançado um erro:
 	"msg": "Bad Authorization header. Expected 'Authorization: Bearer <JWT>'"
 }
 ```
+</details>
+<br>
+<details>
+  <summary>
+    <b>GET /client/image/&ltimage_hash> - Essa rota captura dados de imagem de um cliente</b>
+  </summary>
 
-- **Captura dado de imagem de um Client**
-
-`GET /client/image/<image_name> - FORMATO DA REQUISIÇÃO`
+`GET /client/image/<image_hash> - FORMATO DA REQUISIÇÃO`
 
 Não necessita corpo de requisição. Precisa do nome do imagem como parametro na URL
 
 `OK - FORMATO DA RESPOSTA - STATUS 200`
 
-Caso dê tudo certo, a resposta será assim:
-renfediza a imagem
+Caso dê tudo certo, a resposta será renderização da imagem
 
-`OK - FORMATO DA RESPOSTA - STATUS 200`
+Erro:
 
-Caso não tenha imagem retorna vazio.
+Caso não tenha imagem:
 
-- **Atualiza dados do Client**
+`NOT_FOUND - FORMATO DA RESPOSTA - STATUS 404`
+```json
+{
+  "msg": "image client not found"
+}
+```
+</details>
+<br>
+<details>
+  <summary>
+    <b>PATCH /clients - Essa rota atualiza as informações do cliente</b>
+  </summary>
 
 `PATCH /clients - FORMATO DA REQUISIÇÃO`
 
 Atualiza os dados do cliente que estiver logado.
 Todos os parametros são opicionais e os demais que não constam nessa relação são ignorados.
-O birth_date não pode ser alterado.
 
-corpo de requisição
+> O birth_date não pode ser alterado.
+
+Corpo de requisição
 
 ```json
 {
@@ -644,8 +705,12 @@ Caso dê tudo certo, a resposta será assim:
   "city": "fortaleza"
 }
 ```
-
-- **Desativar Client**
+</details>
+<br>
+<details>
+  <summary>
+    <b>DELETE /clients - Essa rota "desativa" a conta de cliente</b>
+  </summary>
 
 `DELETE /clients - FORMATO DA REQUISIÇÃO`
 
@@ -693,10 +758,34 @@ Caso não esteja autenticado será lançado um erro:
 	"msg": "Bad Authorization header. Expected 'Authorization: Bearer <JWT>'"
 }
 ```
+</details>
+<br>
+<details>
+  <summary>
+    <b>DELETE /clients/logout - Essa rota revoga o token do cliente</b>
+  </summary>
 
-- **Reativar Cliente - Recuperar senha.**
+`DELETE /clients/logout - FORMATO DA REQUISIÇÃO`
 
-Obs.: Essa rota só pode se alcançada se o token de autentificação for do tatuador do tipo admin
+Sem corpo de requisição
+
+Caso tudo dê certo, a resposta será assim:
+
+`OK - FORMATO DA RESPOSTA - STATUS 200`
+
+```json
+{
+  "msg": "JWT revoked"
+}
+```
+</details>
+<br>
+<details>
+  <summary>
+    <b>POST /clients/to_recover - Essa rota "recupera" a senha do cliente</b>
+  </summary>
+
+Obs.: Essa rota só pode se alcançada se o token de autenticação for do tatuador do tipo admin
 
 `POST /clients/to_recover - FORMATO DA REQUISIÇÃO`
 
@@ -710,10 +799,15 @@ campo de requisição
 ```
 
 o id que deve ser passado deve ser referente ao cliente na qual será recuperado a conta.
+</details>
+<br>
 
 ### Rota Tattooists
-
-- **Listar todos os Tatuadores**
+<br>
+<details>
+  <summary>
+    <b>GET /tattoists - Essa rota retorna todos os tatuadores</b>
+  </summary>
 
 `GET /tattooists - FORMATO DA REQUISIÇÃO`
 
@@ -774,8 +868,12 @@ Caso o token tenha expirado será lançado um erro:
 	"msg": "Token has expired"
 }
 ```
-
-- **Capturar dados de um Tatuadores**
+</details>
+<br>
+<details>
+  <summary>
+    <b>GET /tattooists/&ltid_tattooist> - Retorna dados de um tatuador</b>
+  </summary>
 
 `GET /tattooists/<id_tattooist> - FORMATO DA REQUISIÇÃO`
 
@@ -819,8 +917,37 @@ Caso não esteja autenticado será lançado um erro:
 	"msg": "Bad Authorization header. Expected 'Authorization: Bearer <JWT>'"
 }
 ```
+</details>
+<br>
+<details>
+  <summary>
+    <b>GET /tattooists/image/&ltimage_hash> - Essa rota captura dados de imagem de um dos tatuadores</b>
+  </summary>
 
-- **Atualiza dados do Tatuador**
+`GET /tattooists/image/<image_hash> - FORMATO DA REQUISIÇÃO`
+
+Não necessita corpo de requisição. Precisa do nome do imagem como parametro na URL
+
+`OK - FORMATO DA RESPOSTA - STATUS 200`
+
+Caso dê tudo certo, a resposta será renderização da imagem
+
+Erro:
+
+Caso não tenha imagem:
+
+`NOT_FOUND - FORMATO DA RESPOSTA - STATUS 404`
+```json
+{
+  "msg": "image tattooists not found"
+}
+```
+</details>
+<br>
+<details>
+  <summary>
+    <b>PATCH /tattooists - Essa rota atualiza os dados de um tatuador</b>
+  </summary>
 
 `PATCH /tattooists - FORMATO DA REQUISIÇÃO`
 
@@ -850,7 +977,7 @@ Caso dê tudo certo, a resposta será assim:
   "email": "new_email@email.com",
   "general_information": "< descriptions >",
   "admin": true,
-  "url_image": "None/tatooists/image/None"
+  "url_image": "https://metamorfo-tattoo.herokuapp.com/tatooists/image/<image_name>"
 }
 ```
 
@@ -888,8 +1015,12 @@ Exemplo : email passado faltando o ".com" no final
 	"error": "email in format incorrect"
 }
 ```
-
-- **Desativar Tatuador**
+</details>
+<br>
+<details>
+  <summary>
+    <b>DELETE /tattooists - Essa rota "desativa" a conta de um tatuador</b>
+  </summary>
 
 `DELETE /tattooists - FORMATO DA REQUISIÇÃO`
 
@@ -937,10 +1068,84 @@ Caso não esteja autenticado será lançado um erro:
 	"msg": "Bad Authorization header. Expected 'Authorization: Bearer <JWT>'"
 }
 ```
+</details>
+<br>
+<details>
+  <summary>
+    <b>DELETE /tattooists/logout - Essa rota revoga o token do tatuador</b>
+  </summary>
+
+`DELETE /tattooists/logout - FORMATO DA REQUISIÇÃO`
+
+Sem corpo de requisição
+
+Caso tudo dê certo, a resposta será assim:
+
+`OK - FORMATO DA RESPOSTA - STATUS 200`
+
+```json
+{
+  "msg": "JWT revoked"
+}
+```
+</details>
+<br>
+<details>
+  <summary>
+    <b>POST /tattooist/to_recover - Essa rota "recupera" a senha do tatuador</b>
+  </summary>
+
+> Obs.: Essa rota só pode ser alcançada se o token de autenticação for do tatuador do tipo "admin"
+
+`POST /tattooist/to_recover - FORMATO DA REQUISIÇÃO`
+
+Campo de requisição
+
+```json
+{
+  "id_tattoist": "b7fedafa-9c9c-4c16-902c-b80175608e1b",
+  "new_password": "s2#S"
+}
+```
+Resposta sem corpo.
+
+Caso tattooist não seja um admin :
+
+` UNAUTHORIZED - FORMATO DA RESPOSTA - STATUS 401`
+
+```json
+{
+  "msg": "not unauthorized"
+}
+```
+
+Caso não encontre o tattooist :
+
+`NOT_FOUND - FORMATO DA RESPOSTA - STATUS 404`
+
+```json
+{
+  "msg": "tattooist not found"
+}
+```
+Caso não encontre o client :
+
+` NOT_FOUND - FORMATO DA RESPOSTA - STATUS 404`
+
+```json
+{
+  "msg": "client not found"
+}
+```
+</details>
+<br>
 
 ### Rota Tattoos
-
-- **Criar uma tatuagem**
+<br>
+<details>
+  <summary>
+    <b>POST /tattoos - Essa rota cria uma tatuagem</b>
+  </summary>
 
 `POST /tattoos - FORMATO DA REQUISIÇÃO`
 
@@ -1041,7 +1246,12 @@ _Retorno_:
   "msg": "id_tattooist not found"
 }
 ```
-
+</details>
+<br>
+<details>
+  <summary>
+    <b>GET /tattoos - Essa rota retorna todas as tatuagens cadastradas</b>
+  </summary>
 - **Listar dados das tatuagens feitas**
 
 `GET /tattoos - FORMATO DA REQUISIÇÃO`
@@ -1108,8 +1318,12 @@ Caso o token tenha expirado será lançado um erro:
 	"msg": "Token has expired"
 }
 ```
-
-- **Capturar dados de uma tatuagem especifica**
+</details>
+<br>
+<details>
+  <summary>
+    <b>GET /tattoos/&ltid_tattoo> - Essa rota retorna informações sobre uma tatuagem específica</b>
+  </summary>
 
 `GET /tattoos/<id_tattoo> - FORMATO DA REQUISIÇÃO`
 
@@ -1166,12 +1380,41 @@ Caso o id esteja em formato incorreto:
 }
 
 ```
+</details>
+<br>
+<details>
+  <summary>
+    <b>GET /tattoos/image/&ltimage_hash> - Essa rota captura dados de imagem de uma tatuagem</b>
+  </summary>
 
-- **Atualiza dados de uma tatuagem**
+`GET /tattoos/image/<image_hash> - FORMATO DA REQUISIÇÃO`
+
+Não necessita corpo de requisição. Precisa do nome do imagem como parametro na URL
+
+`OK - FORMATO DA RESPOSTA - STATUS 200`
+
+Caso dê tudo certo, a resposta será renderização da imagem
+
+Erro:
+
+Caso não tenha imagem:
+
+`NOT_FOUND - FORMATO DA RESPOSTA - STATUS 404`
+```json
+{
+  "msg": "tattoo image not found"
+}
+```
+</details>
+<br>
+<details>
+  <summary>
+    <b>PATCH /tattoos/&ltid_tattoo> - Essa rota atualiza informações de tatuagens</b>
+  </summary>
 
 `PATCH /tattoos/<id_tattoo> - FORMATO DA REQUISIÇÃO`
 
-Para atualizar dados da tatuagem. Passe os campos que quer atualizar.
+Para atualizar dados da tatuage, passe os campos que quer atualizar.
 Todos os parametros são opcionais e os demais que não constam nessa relação são ignorados.
 
 corpo de requisição
@@ -1181,7 +1424,17 @@ corpo de requisição
   "size": ["Small", "Medium", "Large"],
   "colors": true,
   "body_parts": "Arm",
-  "id_tattoist": "20d097d1-0d53-4b10-9ebb-2b91e262d270"
+  "tattoo_schedule": {
+      "start": "15/03/2022 21:00:00",
+			"end": "15/03/2022 22:00:00"
+	},
+	"id_tattooist": "1f1d0760-e2ca-4acd-a0ea-0cff41f64d89",
+	"materials": [
+	    {
+		    "id_item": "66c9bd2d-0923-44ca-a2f7-cd485fbc7f89",
+		    "quantity": 3
+	    }
+    ],
 }
 ```
 
@@ -1196,17 +1449,97 @@ Caso dê tudo certo, a resposta será assim:
   "colors": true,
   "id_client": "aadb0d9b-70bc-44c4-afac-0771edba8bd9",
   "body_parts": "Arm",
-  "id_tattoist": "20d097d1-0d53-4b10-9ebb-2b91e262d270"
+  "image_models": [],
+	"tattooist": {
+		"id": "1f1d0760-e2ca-4acd-a0ea-0cff41f64d89",
+		"name": "Cricardo",
+		"email": "teste_ric@email.com",
+		"general_information": "",
+		"admin": true,
+		"url_image": "http://localhost:5000/tatooists/image/None"
+	},
+	"tattoo_schedule": {
+		"id": "fb3af2c0-7289-4138-a956-13f66b6066e4",
+		"start": "Wed, 05 Oct 2022 15:00:00 GMT",
+		"end": "Wed, 05 Oct 2022 16:00:00 GMT",
+		"finished": false
+	},
+  "materials": [
+		{
+			"id": "cad66967-3bbd-4d44-8cf9-1ee3f61ba3bd",
+			"id_item": "76506511-1d29-4e24-81f9-35d2d13e1d93",
+			"id_tattoo": "51032eab-fa71-43ed-9871-f4fa3581296c",
+			"quantity": 3
+		}
+	]
+}
+```
+Erros Possíveis:
+
+`400 - BAD_REQUEST`
+
+Indica a falta de algum campo obrigatório. Os campos nessas condições são listados na mensagem de erro.
+
+Retorno
+
+``` json
+{
+	"msg": "required fields missing <list>"
 }
 ```
 
-### Rotas referente ao estoque
+`400 - BAD_REQUEST`
 
-- **Criar um item no estoque**
+Algum campo foi passado com o tipo de valor errado. Os campos nessas condições são listados na mensagem de erro.
+
+Retorno
+
+``` json
+{
+  "msg": "invalid keys values <list>"
+}
+```
+
+`404 - NOT FOUND`
+
+Não foi encontrado uma tatuagem ou um item com o id informado.
+
+Retorno
+
+``` json
+{
+  "msg": "<tattoo||item> not found"
+}
+```
+
+`409 - CONFLICT`
+
+Erro relacionado ao cadastro de materiais.
+A quantidade a ser retirada excede o que tem no estoque.
+Retorno
+
+``` json
+{
+  "msg": "unavaliable item quantity",
+  "item": {
+    "id": "66c9bd2d-0923-44ca-a2f7-cd485fbc7f89",
+    "name": "Tinta preta",
+    "description": "Serve para furar! ;-)",
+    "remaining_quantity": 2
+  }
+}
+```
+</details>
+<br>
+
+### Rotas referente ao estoque
+<br>
+<details>
+  <summary>
+    <b>POST /storage - Essa rota cria um item no estoque</b>
+  </summary>
 
 `POST /storage - FORMATO DA REQUISIÇÃO`
-
-Registra um item para armazenar no estoque.
 
 > Deve ser realizado por um tatuador **admin**.
 
@@ -1296,8 +1629,12 @@ _Retorno_
   "msg": "id_tattooist not found"
 }
 ```
-
-- **Listar dados do estoque**
+</details>
+<br>
+<details>
+  <summary>
+    <b>GET /storage - Essa rota retorna todos os itens no estoque</b>
+  </summary>
 
 `GET /storage - FORMATO DA REQUISIÇÃO`
 
@@ -1318,6 +1655,12 @@ Caso exista dados no estoque será retornado um lista:
   }
 ]
 ```
+</details>
+<br>
+<details>
+  <summary>
+    <b>PATCH /storage/&ltid> - Atualiza os dados de um item</b>
+  </summary>
 
 - **Atualiza dados de um item do estoque**
 
@@ -1349,6 +1692,8 @@ Caso dê tudo certo, a resposta será assim:
   "validity": "Fri, 20 May 2022 00:00:00 GMT"
 }
 ```
+</details>
+<br>
 
 # capstone-q3
 
