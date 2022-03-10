@@ -7,6 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.configs.database import db
 from app.classes.app_with_db import current_app
+import hashlib
 
 
 @dataclass
@@ -18,6 +19,8 @@ class Tattooist(db.Model):
     general_information: str
     admin: str
     url_image: str = None
+    image_hash = None
+    image_name: str = None
 
     __tablename__ = "tattooists"
 
@@ -38,7 +41,7 @@ class Tattooist(db.Model):
     @url_image.getter
     def url_image(self):
         baseUrl = current_app.config["BASE_URL"]
-        endpoint = "/tatooists/image/"
+        endpoint = "/tattooists/image/"
         url = f"{baseUrl}{endpoint}{self.image_name}"
         return url
 
@@ -52,3 +55,13 @@ class Tattooist(db.Model):
 
     def verify_password(self, password_to_compare):
         return check_password_hash(self.password_hash, password_to_compare)
+
+    @property
+    def image_hash(self):
+        return self.image_name
+
+    @image_hash.setter
+    def image_hash(self, image_name_to_hash):
+        hash = hashlib.md5(
+            f"{image_name_to_hash}{self.email}".encode()).hexdigest()
+        self.image_name = hash
