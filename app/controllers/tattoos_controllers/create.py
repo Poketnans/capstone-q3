@@ -87,9 +87,9 @@ def create(payload: dict):
         if isinstance(error.orig, ForeignKeyViolation):
             error_field = get_orig_error_field(error)
             msg = {"msg": f"{error_field} not found"}
-            return jsonify(msg), HTTPStatus.CONFLICT
+            return jsonify(msg), HTTPStatus.NOT_FOUND
         else:
             raise error
-    
+
     except werkzeug.exceptions.UnsupportedMediaType as e:
         return e.description, HTTPStatus.UNSUPPORTED_MEDIA_TYPE
