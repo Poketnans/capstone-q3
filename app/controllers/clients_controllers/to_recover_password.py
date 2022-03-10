@@ -14,7 +14,7 @@ from app.models.tattooists_model import Tattooist
 
 
 @jwt_required()
-@validator(password="password")
+@validator(password="new_password")
 @verify_payload(
     fields_and_types={
         'new_password': str,
@@ -34,7 +34,7 @@ def to_recover_password(payload):
         client: Client = Client.query.filter_by(id=payload['id_client']).first_or_404(
             description={"msg": "client not found"})
 
-        client.password = payload['password']
+        client.password = payload['new_password']
         session.commit()
 
         return "", HTTPStatus.NO_CONTENT

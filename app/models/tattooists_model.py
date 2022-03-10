@@ -20,8 +20,6 @@ class Tattooist(db.Model):
     general_information: str
     admin: str
     url_image: str = None
-    image_hash = None
-    image_name: str = None
 
     __tablename__ = "tattooists"
 
