@@ -17,12 +17,11 @@ from app.models import Storage
     optional=["name", "quantity", "description", "validity"]
 )
 @jwt_required()
-def update(id):
+def update(id, payload):
 
     session: Session = current_app.db.session
 
     try:
-        payload = request.get_json()
 
         item: Storage = Storage.query.get(id)
         if not item:
