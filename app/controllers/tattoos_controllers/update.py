@@ -45,12 +45,12 @@ def update(id_tattoo, payload: dict):
 
         materials = payload.pop("materials", None)
         if materials:
-            materials_fields = {"id_storage": str, "quantity": int}
+            materials_fields = {"id_item": str, "quantity": int}
             for material_info in materials:
                 material_info['id_tattoo'] = id_tattoo
 
                 # looking for existing storage item
-                Storage.query.filter_by(id=material_info['id_storage']).first_or_404(
+                Storage.query.filter_by(id=material_info['id_item']).first_or_404(
                     description={"msg": "storage item not found"})
 
                 material_payload = payload_eval(
