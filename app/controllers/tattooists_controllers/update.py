@@ -38,7 +38,7 @@ def update(payload):
         if files:
             for file in files:
                 tattoist.image_bin = file.file_bin
-                tattoist.image_name = file.filename
+                tattoist.image_hash = file.filename
                 tattoist.image_mimetype = file.mimetype
 
         session.add(tattoist)
