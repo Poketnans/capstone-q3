@@ -15,14 +15,12 @@ def get_data(exception: bool = True, key_form: str = "data") -> "dict or None":
             `from app.errors.JSONNotFound` - Body vazio.
     '''
 
-    data = None
+    data = {}
     if(request.get_json()):
         data: dict = request.get_json()
     elif request.form.get(key_form):
         data: dict = loads(request.form.get(key_form))
         if data.get("file"):
             data.pop("file")
-    elif exception:
-        raise JSONNotFound
 
     return data
