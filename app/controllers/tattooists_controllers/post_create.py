@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from app.models import Tattooist
 from app.services import get_files, get_orig_error_field, generate_image_default
 from app.decorators import verify_payload, validator
-
+import werkzeug.exceptions
 
 @validator(email="email", password="password")
 @verify_payload(
@@ -55,3 +55,5 @@ def post_create(payload):
             return jsonify(msg), HTTPStatus.CONFLICT
         else:
             raise error
+    except werkzeug.exceptions.UnsupportedMediaType as e:
+        return e.description, HTTPStatus.UNSUPPORTED_MEDIA_TYPE
