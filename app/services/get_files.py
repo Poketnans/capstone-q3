@@ -3,6 +3,9 @@ from environs import os
 
 from flask import request
 from werkzeug.utils import secure_filename
+import werkzeug.exceptions
+
+allowed_formats = ["image/jpeg", "image/png"]
 
 
 class ImageFile():
@@ -36,7 +39,9 @@ def get_files(limite=None) -> "list[ImageFile] or None":
                 file_bin = file.read()
                 filename = secure_filename(value.filename)
                 mimetype = value.mimetype
-
+            if mimetype not in allowed_formats:
+                raise werkzeug.exceptions.UnsupportedMediaType(
+                    description={"msg": f"unsuported media type, allowed formats: {allowed_formats}"})
             image = ImageFile(**{
                 "file_bin": file_bin,
                 "filename": filename,

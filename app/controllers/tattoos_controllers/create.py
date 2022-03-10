@@ -15,6 +15,7 @@ from app.models.sessions_model import Session
 from app.models.tattoo_images_model import TattooImage
 from app.decorators import verify_payload, validator
 from app.services import payload_eval, get_orig_error_field, get_files
+import werkzeug.exceptions
 
 
 @jwt_required()
@@ -89,3 +90,6 @@ def create(payload: dict):
             return jsonify(msg), HTTPStatus.CONFLICT
         else:
             raise error
+    
+    except werkzeug.exceptions.UnsupportedMediaType as e:
+        return e.description, HTTPStatus.UNSUPPORTED_MEDIA_TYPE

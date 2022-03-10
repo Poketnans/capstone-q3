@@ -81,3 +81,4 @@ venv.bak/
 # DBeaver
 .dbeaver
 .project
+/Scripts
