@@ -66,14 +66,14 @@ def create(payload: dict):
 
         else:
             raise AttributeError
-        list_tatoota = tatooist.list_sessions()
-        if not verify_tatoo_schedule(new_session, list_tatoota):
+        list_tattoo = tatooist.list_sessions()
+        if not verify_tatoo_schedule(new_session, list_tattoo):
             return {"msg": "date and hour alredy exist."}, 422
 
         session.add(new_tattoo)
         session.commit()
 
-        return jsonify(tatooist.list_sessions()), HTTPStatus.CREATED
+        return jsonify(new_tattoo), HTTPStatus.CREATED
 
     except InvalidValueTypesError as err:
         return jsonify(err.description), err.code
