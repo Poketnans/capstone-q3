@@ -35,8 +35,10 @@ def update(id_tattoo, payload: dict):
         id_tattooist = tattoist_jwt['id']
 
         # looking for existing tattooist
-        Tattooist.query.filter_by(id=id_tattooist).first_or_404(
-            description={"msg": "tattooist not found"})
+        tattoist = Tattooist.query.filter_by(id=id_tattooist).first()
+
+        if not tattoist:
+            raise NotAnAdmin
 
         tattoo: Tattoo = Tattoo.query.get(id_tattoo)
 
@@ -73,7 +75,7 @@ def update(id_tattoo, payload: dict):
     except FieldMissingError as err:
         return jsonify(err.description), err.code
     except NotAnAdmin:
-        return jsonify({"msg": "user does not have the access rights to do this"}), HTTPStatus.FORBIDDEN
+        return jsonify({"msg": "you don't have the right privileges"}), HTTPStatus.FORBIDDEN
 
     except NoResultFound:
         return jsonify({"msg": "not found"}), HTTPStatus.NOT_FOUND

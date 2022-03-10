@@ -42,7 +42,7 @@ def to_recover_password(payload):
         return "", HTTPStatus.NO_CONTENT
 
     except NotAnAdmin as e:
-        return {"msg": "not unauthorized"}, HTTPStatus.UNAUTHORIZED
+        return {"msg": "you don't have the right privileges"}, HTTPStatus.FORBIDDEN
 
     except werkzeug.exceptions.NotFound as err:
         return err.description, HTTPStatus.NOT_FOUND
