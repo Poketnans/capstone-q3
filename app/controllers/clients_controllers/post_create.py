@@ -4,6 +4,7 @@ from flask import jsonify
 from psycopg2.errors import UniqueViolation
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+import werkzeug.exceptions
 from app.classes.app_with_db import current_app
 from app.models.clients_model import Client
 from app.decorators import verify_payload, validator
@@ -51,5 +52,7 @@ def post_create(payload):
             message = str(error.orig).split("Key")[1].split("=")[0]
             msg = {"msg": f"{message[2:-1]} already registered"}
             return jsonify(msg), HTTPStatus.CONFLICT
+    except werkzeug.exceptions.UnsupportedMediaType as e:
+        return e.description, HTTPStatus.UNSUPPORTED_MEDIA_TYPE
 
     return jsonify(new_client), HTTPStatus.CREATED
