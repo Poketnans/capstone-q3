@@ -4,6 +4,7 @@ from uuid import uuid4
 from sqlalchemy import Boolean, Column, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import backref, relationship
+from sqlalchemy.orm import relationship, backref
 
 from app.configs.database import db
 
@@ -19,6 +20,7 @@ class Tattoo(db.Model):
     image_models: list
     tattooist: dict
     tattoo_schedule: dict
+    materials: list
 
     __tablename__ = "tattoos"
 
@@ -40,3 +42,5 @@ class Tattoo(db.Model):
 
     tattoo_schedule = relationship("Session", uselist=False)
     materials = relationship("Material", uselist=True)
+
+    session = relationship("Session", uselist=True)

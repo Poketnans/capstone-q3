@@ -1,12 +1,14 @@
 from dataclasses import dataclass
 from uuid import uuid4
 
+import hashlib
 from sqlalchemy import (Column, Date, Integer, LargeBinary, String,
                         Text)
 from sqlalchemy.dialects.postgresql import UUID
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.configs.database import db
+from app.classes.app_with_db import current_app
 
 
 @dataclass
@@ -23,6 +25,8 @@ class Client(db.Model):
     city: str
     url_image: str = None
     tattoos: list = None
+    image_name: str = None
+    image_hash = None
 
     __tablename__ = "clients"
 
@@ -30,7 +34,7 @@ class Client(db.Model):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
     birth_date = Column(Date, nullable=False)
-    password_hash = Column(String, nullable=False, unique=True)
+    password_hash = Column(String, nullable=False)
     phone = Column(String, nullable=False, unique=True)
     general_information = Column(Text)
     street = Column(String, nullable=False)
@@ -45,8 +49,10 @@ class Client(db.Model):
         return self.url_image
 
     @url_image.getter
-    def url_image(self, text="http://localhost:5000/clients/profile_image/"):
-        url = f"{text}{self.image_name}"
+    def url_image(self):
+        baseUrl = current_app.config["BASE_URL"]
+        endpoint = "/client/image/"
+        url = f"{baseUrl}{endpoint}{self.image_name}"
         return url
 
     @property
@@ -59,3 +65,13 @@ class Client(db.Model):
 
     def verify_password(self, password_to_compare):
         return check_password_hash(self.password_hash, password_to_compare)
+
+    @property
+    def image_hash(self):
+        return self.image_name
+
+    @image_hash.setter
+    def image_hash(self, image_name_to_hash):
+        hash = hashlib.md5(
+            f"{image_name_to_hash}{self.email}".encode()).hexdigest()
+        self.image_name = hash

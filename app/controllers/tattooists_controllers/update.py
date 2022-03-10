@@ -1,17 +1,18 @@
 from http import HTTPStatus
-from flask import jsonify, request
+from flask import jsonify
 from app.classes.app_with_db import current_app
-from flask_jwt_extended import jwt_required , get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.orm import Session
 from app.models import Tattooist
-from app.decorators import verify_payload
-from psycopg2.errors import UniqueViolation
+from psycopg2.errors import UniqueViolation, ForeignKeyViolation
+from app.decorators import verify_payload, validator
 from sqlalchemy.exc import IntegrityError
-from app.errors import JSONNotFound
-from app.services.get_data_with_images import get_files
+from app.services import get_files, get_orig_error_field
+import werkzeug
 
 
 @jwt_required()
+@validator(email="email", password="password")
 @verify_payload(
     fields_and_types={
         'name': str,
@@ -19,7 +20,7 @@ from app.services.get_data_with_images import get_files
         'password': str,
         "general_information": str
     },
-    optional=["general_information", "name" , "email" , "password"]
+    optional=["general_information", "name", "email", "password"]
 )
 def update(payload):
     try:
@@ -27,7 +28,8 @@ def update(payload):
         tattoist_jwt = get_jwt_identity()
         id = tattoist_jwt['id']
 
-        tattoist: Tattooist = Tattooist.query.get(id)
+        tattoist: Tattooist = session.query(Tattooist).filter_by(id=id).first_or_404(
+            description={"msg": "tattooist not found"})
 
         for key, value in payload.items():
             setattr(tattoist, key, value)
@@ -39,7 +41,6 @@ def update(payload):
                 tattoist.image_name = file.filename
                 tattoist.image_mimetype = file.mimetype
 
-
         session.add(tattoist)
         session.commit()
 
@@ -47,6 +48,14 @@ def update(payload):
 
     except IntegrityError as error:
         if isinstance(error.orig, UniqueViolation):
-            message = str(error.orig).split("Key")[1].split("=")[0]
-            msg = {"msg": f"{message[2:-1]} already registered, try other"}
+            error_field = get_orig_error_field(error)
+            msg = {"msg": f"{error_field} already registered"}
             return jsonify(msg), HTTPStatus.CONFLICT
+        elif isinstance(error.orig, ForeignKeyViolation):
+            error_field = get_orig_error_field(error)
+            msg = {"msg": f"{error_field} not found"}
+            return jsonify(msg), HTTPStatus.CONFLICT
+        else:
+            raise error
+    except werkzeug.exceptions.NotFound as e:
+        return e.description, HTTPStatus.NOT_FOUND

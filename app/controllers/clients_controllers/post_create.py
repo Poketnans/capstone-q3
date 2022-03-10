@@ -6,10 +6,11 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from app.classes.app_with_db import current_app
 from app.models.clients_model import Client
-from app.decorators import verify_payload
-from app.services.get_data_with_images import get_files
+from app.decorators import verify_payload, validator
+from app.services import get_files, generate_image_default
 
 
+@validator(password="password", birthdate="birth_date", phone="phone", email="email")
 @verify_payload(
     fields_and_types={
         'name': str,
@@ -34,8 +35,13 @@ def post_create(payload):
         if files:
             for file in files:
                 new_client.image_bin = file.file_bin
-                new_client.image_name = file.filename
+                new_client.image_hash = file.filename
                 new_client.image_mimetype = file.mimetype
+        else:
+            image = generate_image_default()
+            new_client.image_mimetype = image.mimetype
+            new_client.image_hash = image.filename
+            new_client.image_bin = image.file_bin
 
         session.add(new_client)
         session.commit()

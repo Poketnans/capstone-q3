@@ -5,11 +5,11 @@ from flask import jsonify, Response
 from functools import wraps
 
 from app.errors import FieldMissingError, InvalidValueTypesError, JSONNotFound
-from app.services.get_data_with_images import get_data_with_images
+from app.services import get_data
 from app.services import payload_eval
 
 
-def verify_payload(fields_and_types: dict = {}, optional: list = []) -> Callable:
+def verify_payload(fields_and_types: dict = {}, optional: list = [], not_empty_string: list = []) -> Callable:
     ''' 
         Realiza a verificação de payload e trata os erros associados.
 
@@ -34,9 +34,10 @@ def verify_payload(fields_and_types: dict = {}, optional: list = []) -> Callable
                 devidas mensagens e códigos de erro.
             '''
             try:
-                data = get_data_with_images()
+                data = get_data()
 
-                filtered_data = payload_eval(data, optional, **fields_and_types)
+                filtered_data = payload_eval(
+                    data, optional, not_empty_string, **fields_and_types)
 
                 return controller(*args, payload=filtered_data, **kwargs)
 

@@ -5,3 +5,4 @@ from .storage_model import Storage
 from .tattoo_images_model import TattooImage
 from .tattooists_model import Tattooist
 from .tattoos_model import Tattoo
+from .blocklist_model import TokenBlocklist

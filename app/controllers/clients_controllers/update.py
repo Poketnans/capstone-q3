@@ -1,19 +1,30 @@
 from http import HTTPStatus
-from flask import current_app, jsonify, request
+from flask import current_app, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import NoResultFound
 
-
 from app.errors import JSONNotFound, InvalidValueTypesError
 from app.models import Client
-from app.services.get_data_with_images import get_data_with_images, get_files
-from app.services.payload_eval import payload_eval
+from app.services import get_files
+from app.decorators import validator, verify_payload
 
 
 @jwt_required()
-def update():
+@validator(password="password", phone="phone", email="email")
+@verify_payload(fields_and_types={
+                'name': str,
+                'email': str,
+                'phone': str,
+                'password': str,
+                'street': str,
+                'number': int,
+                'city': str,
+                'general_information': str,
+                }, optional=['name', 'email', 'phone', 'password', 'street', 'number', 'city', 'general_information'])
+def update(payload):
+
     try:
         session: Session = current_app.db.session
         client_jwt = get_jwt_identity()
@@ -23,22 +34,8 @@ def update():
         if not client:
             raise NoResultFound
 
-        data = get_data_with_images(exception=False)
-        if(data):
-            optional_fields = ["name", "email", "password", "phone", "general_information",
-                               "street", "number", "city", "image_name", "image_bin", "image_mimetype"]
-            field_types = {
-                'name': str,
-                'email': str,
-                'phone': str,
-                'password': str,
-                'street': str,
-                'number': int,
-                'city': str
-            }
-            data = payload_eval(data, optional_fields, **field_types)
-            for key, value in data.items():
-                setattr(client, key, value)
+        for key, value in payload.items():
+            setattr(client, key, value)
 
         files = get_files()
         if files:
@@ -46,8 +43,6 @@ def update():
                 client.image_bin = file.file_bin
                 client.image_name = file.filename
                 client.image_mimetype = file.mimetype
-        if not data and not files:
-            raise JSONNotFound
 
         session.add(client)
         session.commit()
