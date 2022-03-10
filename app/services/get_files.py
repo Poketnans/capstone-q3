@@ -28,20 +28,22 @@ def get_files(limite=None) -> "list[ImageFile] or None":
             if(limite == count):
                 break
 
+            if value.mimetype not in allowed_formats:
+                raise werkzeug.exceptions.UnsupportedMediaType(
+                    description={"msg": f"unsuported media type, allowed formats: {allowed_formats}"})
+
             with Image.open(value) as open_image:
                 (width, height) = (open_image.width//2, open_image.height//2)
                 image_resized = open_image.resize((width, height))
                 image_resized.save(os.path.join(
                     path, secure_filename(value.filename)), quality=60)
-                path_file = f"{path}/{value.filename}"
+                file_name = value.filename.replace(" ", "_")
+                path_file = f"{path}/{file_name}"
 
             with open(path_file, "rb") as file:
                 file_bin = file.read()
                 filename = secure_filename(value.filename)
                 mimetype = value.mimetype
-            if mimetype not in allowed_formats:
-                raise werkzeug.exceptions.UnsupportedMediaType(
-                    description={"msg": f"unsuported media type, allowed formats: {allowed_formats}"})
             image = ImageFile(**{
                 "file_bin": file_bin,
                 "filename": filename,
