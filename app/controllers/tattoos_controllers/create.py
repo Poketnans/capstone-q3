@@ -4,7 +4,7 @@ from flask import jsonify
 from psycopg2.errors import ForeignKeyViolation
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.controllers.tattoos_controllers.verify_tatoo_schedule import verify_tatoo_schedule
+from app.services.verify_tatoo_schedule import verify_tatoo_schedule
 
 from app.errors import FieldMissingError, InvalidValueTypesError
 from app.classes.app_with_db import current_app
@@ -50,6 +50,7 @@ def create(payload: dict):
         tatooist: Tattooist = Tattooist.query.get(payload['id_tattooist'])
 
         files = get_files()
+
         if files:
             for file in files:
                 image_payload = {
@@ -63,6 +64,8 @@ def create(payload: dict):
 
                 new_tattoo.image_models.append(new_image)
 
+        else:
+            raise AttributeError
         list_tatoota = tatooist.list_sessions()
         if not verify_tatoo_schedule(new_session, list_tatoota):
             return {"msg": "date and hour alredy exist."}, 422
@@ -76,6 +79,8 @@ def create(payload: dict):
         return jsonify(err.description), err.code
     except FieldMissingError as err:
         return jsonify(err.description), err.code
+    except AttributeError:
+        return jsonify({"err": "required at least one image"}), HTTPStatus.BAD_REQUEST
 
     except IntegrityError as error:
         if isinstance(error.orig, ForeignKeyViolation):
