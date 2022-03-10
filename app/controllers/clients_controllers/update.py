@@ -8,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.errors import JSONNotFound, InvalidValueTypesError
 from app.models import Client
 from app.services import get_files
-from app.decorators import validator,verify_payload
+from app.decorators import validator, verify_payload
 
 
 @jwt_required()
@@ -23,7 +23,6 @@ from app.decorators import validator,verify_payload
                 'city': str,
                 'general_information': str,
                 }, optional=['name', 'email', 'phone', 'password', 'street', 'number', 'city', 'general_information'])
-
 def update(payload):
 
     try:
@@ -34,7 +33,7 @@ def update(payload):
         client: Client = Client.query.get(id)
         if not client:
             raise NoResultFound
-        
+
         for key, value in payload.items():
             setattr(client, key, value)
 
@@ -44,8 +43,6 @@ def update(payload):
                 client.image_bin = file.file_bin
                 client.image_name = file.filename
                 client.image_mimetype = file.mimetype
-        if not files:
-            raise JSONNotFound
 
         session.add(client)
         session.commit()

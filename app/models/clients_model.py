@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from uuid import uuid4
 
+import hashlib
 from sqlalchemy import (Column, Date, Integer, LargeBinary, String,
                         Text)
 from sqlalchemy.dialects.postgresql import UUID
@@ -24,6 +25,8 @@ class Client(db.Model):
     city: str
     url_image: str = None
     tattoos: list = None
+    image_name: str = None
+    image_hash = None
 
     __tablename__ = "clients"
 
@@ -62,3 +65,13 @@ class Client(db.Model):
 
     def verify_password(self, password_to_compare):
         return check_password_hash(self.password_hash, password_to_compare)
+
+    @property
+    def image_hash(self):
+        return self.image_name
+
+    @image_hash.setter
+    def image_hash(self, image_name_to_hash):
+        hash = hashlib.md5(
+            f"{image_name_to_hash}{self.email}".encode()).hexdigest()
+        self.image_name = hash

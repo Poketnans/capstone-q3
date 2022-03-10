@@ -35,12 +35,12 @@ def post_create(payload):
         if files:
             for file in files:
                 new_client.image_bin = file.file_bin
-                new_client.image_name = file.filename
+                new_client.image_hash = file.filename
                 new_client.image_mimetype = file.mimetype
         else:
             image = generate_image_default()
             new_client.image_mimetype = image.mimetype
-            new_client.image_name = image.filename
+            new_client.image_hash = image.filename
             new_client.image_bin = image.file_bin
 
         session.add(new_client)
