@@ -4,9 +4,11 @@ from flask import jsonify
 from psycopg2.errors import ForeignKeyViolation
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from app.services.verify_tatoo_schedule import verify_tatoo_schedule
 
 from app.errors import FieldMissingError, InvalidValueTypesError
 from app.classes.app_with_db import current_app
+from app.models.tattooists_model import Tattooist
 
 from app.models.tattoos_model import Tattoo
 from app.models.sessions_model import Session
@@ -45,26 +47,33 @@ def create(payload: dict):
         new_tattoo.id_client = user.get('id')
         new_tattoo.tattoo_schedule = new_session
 
+        tatooist: Tattooist = Tattooist.query.get(payload['id_tattooist'])
+
         files = get_files()
 
         if files:
             for file in files:
                 image_payload = {
                     "image_bin": file.file_bin,
-                    "image_name": file.filename,
                     "image_mimetype": file.mimetype,
+                    "image_name_hash": file.filename,
                     "id_tattoo": new_tattoo.id
                 }
 
                 new_image = TattooImage(**image_payload)
 
                 new_tattoo.image_models.append(new_image)
+
         else:
             raise AttributeError
+        list_tatoota = tatooist.list_sessions()
+        if not verify_tatoo_schedule(new_session, list_tatoota):
+            return {"msg": "date and hour alredy exist."}, 422
 
         session.add(new_tattoo)
         session.commit()
-        return jsonify(new_tattoo), HTTPStatus.CREATED
+
+        return jsonify(tatooist.list_sessions()), HTTPStatus.CREATED
 
     except InvalidValueTypesError as err:
         return jsonify(err.description), err.code
