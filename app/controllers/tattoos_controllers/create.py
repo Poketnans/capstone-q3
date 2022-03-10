@@ -46,6 +46,7 @@ def create(payload: dict):
         new_tattoo.tattoo_schedule = new_session
 
         files = get_files()
+
         if files:
             for file in files:
                 image_payload = {
@@ -58,6 +59,9 @@ def create(payload: dict):
                 new_image = TattooImage(**image_payload)
 
                 new_tattoo.image_models.append(new_image)
+        else:
+            raise AttributeError
+
         session.add(new_tattoo)
         session.commit()
         return jsonify(new_tattoo), HTTPStatus.CREATED
@@ -66,6 +70,8 @@ def create(payload: dict):
         return jsonify(err.description), err.code
     except FieldMissingError as err:
         return jsonify(err.description), err.code
+    except AttributeError:
+        return jsonify({"err": "required at least one image"}), HTTPStatus.BAD_REQUEST
 
     except IntegrityError as error:
         if isinstance(error.orig, ForeignKeyViolation):
