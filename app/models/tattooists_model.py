@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 
 from sqlalchemy import Boolean, Column, LargeBinary, String, Text
@@ -52,3 +53,13 @@ class Tattooist(db.Model):
 
     def verify_password(self, password_to_compare):
         return check_password_hash(self.password_hash, password_to_compare)
+
+    def list_sessions(self):
+        list_tattoo_schedule = []
+        date_now = datetime.utcnow() - timedelta(hours=3)
+
+        for element in self.tattoos:
+            start = element.tattoo_schedule.start
+            if(start >= date_now):
+                list_tattoo_schedule.append(element.tattoo_schedule)
+        return list_tattoo_schedule
