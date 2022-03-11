@@ -1,7 +1,3 @@
-# capstone-q3
-
-Projeto Capstone Q3 na Kenzie Academy
-
 # Metamorfo Tattoo Api
 
 ### Controle seus agendamentos de tatoo e materiais.
@@ -15,7 +11,7 @@ Projeto Capstone Q3 na Kenzie Academy
 
 https://metamorfo-tattoo.herokuapp.com/
 
-**Metaformo Tattoo Api** é uma aplicação de serviço construida durante o capstone do Q3 no curso de Fullstack Developer na Kenzie Academy.Esta aplicação foi desenvolvida com o Python e Micro Framework Flask.
+**Metaformo Tattoo Api** é uma aplicação de serviço construida durante o capstone do Q3 no curso de Fullstack Developer na Kenzie Academy. Esta aplicação foi desenvolvida com o Python e o Micro Framework Flask.
 
 O Objetivo da aplicação é o usuário cliente marcar agendamentos de tatuagem com um tatuador de sua escolha. O tatuador pode ver seus agendamentos e organizar seu dia a dia para realizar tais atividades.
 
@@ -79,21 +75,20 @@ flask run
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
-<table textAlign="center">
+<table textAlign="center" style="margin: 0 auto;">
   <tr>
-  <td align="center"><a href="https://github.com/BeatrixFox"><img src="https://avatars.githubusercontent.com/u/72284689?v=4" width="100px;" alt=""/><br />
+  <td align="center" title="BeatrixFox"><a href="https://github.com/BeatrixFox"><img src="https://avatars.githubusercontent.com/u/72284689?v=4" width="100px;" alt=""/><br />
     </td>
-    <td align="center"><a href="https://github.com/Brunoro811"><img src="https://avatars.githubusercontent.com/u/82813383?v=4" width="100px;" alt=""/><br />
+    <td align="center" title="Bruno"><a href="https://github.com/Brunoro811"><img src="https://avatars.githubusercontent.com/u/82813383?v=4" width="100px;" alt=""/><br />
     </td>
-    <td align="center"><a href="https://github.com/cricardolima"><img src="https://avatars.githubusercontent.com/u/81661730?v=4" width="100px;" alt=""/><br />
+    <td align="center" title="Ricardo Lima"><a href="https://github.com/cricardolima"><img src="https://avatars.githubusercontent.com/u/81661730?v=4" width="100px;" alt=""/><br />
     </td>
-     <td align="center"><a href="https://github.com/pedromenimen"><img src="https://avatars.githubusercontent.com/u/77471145?v=4" width="100px;" alt=""/><br />
+     <td align="center" title="Pedro Henrique"><a href="https://github.com/pedromenimen"><img src="https://avatars.githubusercontent.com/u/77471145?v=4" width="100px;" alt=""/><br />
     </td>
-    <td align="center"><a href="https://github.com/Poketnans"><img src="https://avatars.githubusercontent.com/u/82735052?v=4" width="100px;" alt=""/><br />
+    <td align="center" title="Etnan"><a href="https://github.com/Poketnans"><img src="https://avatars.githubusercontent.com/u/82735052?v=4" width="100px;" alt=""/><br />
     </td>
-    <td align="center"><a href="https://github.com/BaiduAV"><img src="https://avatars.githubusercontent.com/u/82685528?v=4" width="100px;" alt=""/><br />
-    </td>
-    
+    <td align="center" title="Luiz Victor"><a href="https://github.com/BaiduAV"><img src="https://avatars.githubusercontent.com/u/82685528?v=4" width="100px;" alt=""/><br />
+    </td>    
   </tr>
 </table>
 <hr/>
@@ -1693,8 +1688,3 @@ Caso dê tudo certo, a resposta será assim:
 }
 ```
 </details>
-<br>
-
-# capstone-q3
-
-Projeto Capstone Q3 na Kenzie Academy
