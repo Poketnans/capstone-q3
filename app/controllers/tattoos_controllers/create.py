@@ -15,6 +15,7 @@ from app.models.sessions_model import Session
 from app.models.tattoo_images_model import TattooImage
 from app.decorators import verify_payload, validator
 from app.services import payload_eval, get_orig_error_field, get_files
+import werkzeug.exceptions
 
 
 @jwt_required()
@@ -86,6 +87,9 @@ def create(payload: dict):
         if isinstance(error.orig, ForeignKeyViolation):
             error_field = get_orig_error_field(error)
             msg = {"msg": f"{error_field} not found"}
-            return jsonify(msg), HTTPStatus.CONFLICT
+            return jsonify(msg), HTTPStatus.NOT_FOUND
         else:
             raise error
+
+    except werkzeug.exceptions.UnsupportedMediaType as e:
+        return e.description, HTTPStatus.UNSUPPORTED_MEDIA_TYPE

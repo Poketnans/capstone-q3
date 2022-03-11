@@ -8,7 +8,7 @@ from psycopg2.errors import UniqueViolation, ForeignKeyViolation
 from app.decorators import verify_payload, validator
 from sqlalchemy.exc import IntegrityError
 from app.services import get_files, get_orig_error_field
-import werkzeug
+import werkzeug.exceptions
 
 
 @jwt_required()
@@ -38,7 +38,7 @@ def update(payload):
         if files:
             for file in files:
                 tattoist.image_bin = file.file_bin
-                tattoist.image_name = file.filename
+                tattoist.image_hash = file.filename
                 tattoist.image_mimetype = file.mimetype
 
         session.add(tattoist)
@@ -59,3 +59,5 @@ def update(payload):
             raise error
     except werkzeug.exceptions.NotFound as e:
         return e.description, HTTPStatus.NOT_FOUND
+    except werkzeug.exceptions.UnsupportedMediaType as e:
+        return e.description, HTTPStatus.UNSUPPORTED_MEDIA_TYPE

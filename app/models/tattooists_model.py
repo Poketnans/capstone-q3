@@ -27,7 +27,7 @@ class Tattooist(db.Model):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
     password_hash = Column(String, nullable=False)
-    general_information = Column(Text)
+    general_information = Column(Text, default="")
     admin = Column(Boolean)
     image_name = Column(String)
     image_bin = Column(LargeBinary)

@@ -4,11 +4,13 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import NoResultFound
+import werkzeug
 
 from app.errors import JSONNotFound, InvalidValueTypesError
 from app.models import Client
 from app.services import get_files
 from app.decorators import validator, verify_payload
+import werkzeug.exceptions
 
 
 @jwt_required()
@@ -41,7 +43,7 @@ def update(payload):
         if files:
             for file in files:
                 client.image_bin = file.file_bin
-                client.image_name = file.filename
+                client.image_hash = file.filename
                 client.image_mimetype = file.mimetype
 
         session.add(client)
@@ -54,3 +56,5 @@ def update(payload):
         return jsonify(err.description), err.code
     except NoResultFound as e:
         return {"msg": "user not found"}, HTTPStatus.NOT_FOUND
+    except werkzeug.exceptions.UnsupportedMediaType as e:
+        return e.description, HTTPStatus.UNSUPPORTED_MEDIA_TYPE

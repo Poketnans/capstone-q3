@@ -63,7 +63,7 @@ def validator(
 
                     except ValueError as err:
                         resp = {
-                            'msg': 'Invalid date format. Try DD/MM/YYY'
+                            'msg': 'Invalid date format. It must be in the format DD/MM/YYYY'
                         }
                         return resp, HTTPStatus.BAD_REQUEST
 
@@ -91,11 +91,11 @@ def validator(
                             return {"error": "Minimum time of 1 hour per tattoo"}, 400
 
                     except ValueError:
-                        return {"error": "date in format incorrect"}, 400
+                        return {"error": "datetime in the wrong format. It must be in the format DD/MM/YYYY H:M:S"}, 400
 
                 if request_json.get(birthdate):
                     if not match(regex_bithdate, request_json[birthdate]):
-                        return {"error": "birthdate in format incorrect"}, 400
+                        return {"error": "birthdate in format incorrect. It must be in the format DD/MM/YYYY"}, 400
 
                 if request_json.get(phone):
                     if not match(regex_phone, request_json[phone]):

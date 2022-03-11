@@ -11,10 +11,10 @@ import werkzeug
 
 from app.classes.app_with_db import current_app
 from app.decorators import verify_payload
-from app.errors import FieldMissingError, InvalidValueTypesError
-from app.models import Tattooist, Tattoo, Material, Storage
+from app.errors import FieldMissingError, InvalidValueTypesError, UnavaliableItemQuantityError
+from app.models import Tattooist, Tattoo, Material, Storage, TattooImage
 from app.errors import NotAnAdmin
-from app.services import payload_eval
+from app.services import payload_eval, get_files
 
 
 @jwt_required()
@@ -34,14 +34,28 @@ def update(id_tattoo, payload: dict):
         tattoist_jwt = get_jwt_identity()
         id_tattooist = tattoist_jwt['id']
 
-        # looking for existing tattooist
-        Tattooist.query.filter_by(id=id_tattooist).first_or_404(
-            description={"msg": "tattooist not found"})
+        tattoist = Tattooist.query.filter_by(id=id_tattooist).first()
+
+        if not tattoist:
+            raise NotAnAdmin
 
         tattoo: Tattoo = Tattoo.query.get(id_tattoo)
 
         if not tattoo:
             raise NoResultFound
+
+        files = get_files()
+        if files:
+            for file in files:
+                image_payload = {
+                    "image_bin": file.file_bin,
+                    "image_mimetype": file.mimetype,
+                    "image_name_hash": file.filename,
+                    "id_tattoo": tattoo.id
+                }
+
+                new_image = TattooImage(**image_payload)
+                tattoo.image_models.append(new_image)
 
         materials = payload.pop("materials", None)
         if materials:
@@ -49,16 +63,21 @@ def update(id_tattoo, payload: dict):
             for material_info in materials:
                 material_info['id_tattoo'] = id_tattoo
 
-                # looking for existing storage item
-                Storage.query.filter_by(id=material_info['id_item']).first_or_404(
-                    description={"msg": "storage item not found"})
+                item: Storage = Storage.query.get_or_404(material_info['id_item'],
+                                                         description={"msg": "storage item not found"})
 
                 material_payload = payload_eval(
                     material_info,
                     **materials_fields
                 )
+
+                if item.quantity < material_payload["quantity"]:
+                    raise UnavaliableItemQuantityError(item)
+
                 new_material = Material(**material_payload)
                 tattoo.materials.append(new_material)
+
+                item.quantity -= new_material.quantity
 
         for key, value in payload.items():
             setattr(tattoo, key, value)
@@ -72,23 +91,19 @@ def update(id_tattoo, payload: dict):
         return jsonify(err.description), err.code
     except FieldMissingError as err:
         return jsonify(err.description), err.code
+    except UnavaliableItemQuantityError as err:
+        return jsonify(err.description), err.code
     except NotAnAdmin:
-        return jsonify({"msg": "user does not have the access rights to do this"}), HTTPStatus.FORBIDDEN
+        return jsonify({"msg": "you don't have the right privileges"}), HTTPStatus.FORBIDDEN
 
     except NoResultFound:
-        return jsonify({"msg": "not found"}), HTTPStatus.NOT_FOUND
+        return jsonify({"msg": "tattoo not found"}), HTTPStatus.NOT_FOUND
 
     except DataError as error:
         if isinstance(error.orig, InvalidTextRepresentation):
-            msg_error = str(error.orig)
-            msg_error = msg_error.replace("\n", "")
-            msg_error = msg_error.replace("^", "")
-            msg_error = " ".join(msg_error.split())
-            msg_error = ":".join(msg_error.split(":")[::2])
-            msg = {"msg": msg_error}
-            return jsonify(msg), HTTPStatus.BAD_REQUEST
+            return jsonify({"msg": "id not found"}), HTTPStatus.BAD_REQUEST
         else:
             raise error
 
     except werkzeug.exceptions.NotFound as err:
-        return jsonify(err.description), HTTPStatus.CONFLICT
+        return jsonify(err.description), HTTPStatus.NOT_FOUND
