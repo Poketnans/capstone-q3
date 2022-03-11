@@ -236,7 +236,7 @@ Os campos phone , street , number , city não foram passados. Obs.: O campo gene
 
 ```JSON
 {
-	"msg": "required fields missing ['phone', 'general_information', 'street', 'number', 'city']"
+	"msg": "required fields missing ['phone', 'street', 'number', 'city']"
 }
 ```
 
@@ -586,7 +586,7 @@ Caso o token tenha expirado será lançado um erro:
 </details>
 <br>
 <details>
-<summary><b>GET /client - Essa rota retorna dado de apenas um cliente</b></summary>
+<summary><b>GET /client - Essa rota retorna os dado do cliente logado</b></summary>
 
 `GET /client - FORMATO DA REQUISIÇÃO`
 
