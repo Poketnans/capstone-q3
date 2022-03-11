@@ -25,7 +25,6 @@ class Client(db.Model):
     city: str
     url_image: str = None
     tattoos: list = None
-    image_name: str = None
     image_hash = None
 
     __tablename__ = "clients"
@@ -36,7 +35,7 @@ class Client(db.Model):
     birth_date = Column(Date, nullable=False)
     password_hash = Column(String, nullable=False)
     phone = Column(String, nullable=False, unique=True)
-    general_information = Column(Text)
+    general_information = Column(Text, default="")
     street = Column(String, nullable=False)
     number = Column(Integer, nullable=False)
     city = Column(String, nullable=False)

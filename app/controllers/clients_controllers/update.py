@@ -43,7 +43,7 @@ def update(payload):
         if files:
             for file in files:
                 client.image_bin = file.file_bin
-                client.image_name = file.filename
+                client.image_hash = file.filename
                 client.image_mimetype = file.mimetype
 
         session.add(client)

@@ -101,13 +101,7 @@ def update(id_tattoo, payload: dict):
 
     except DataError as error:
         if isinstance(error.orig, InvalidTextRepresentation):
-            msg_error = str(error.orig)
-            msg_error = msg_error.replace("\n", "")
-            msg_error = msg_error.replace("^", "")
-            msg_error = " ".join(msg_error.split())
-            msg_error = ":".join(msg_error.split(":")[::2])
-            msg = {"msg": msg_error}
-            return jsonify(msg), HTTPStatus.BAD_REQUEST
+            return jsonify({"msg": "id not found"}), HTTPStatus.BAD_REQUEST
         else:
             raise error
 
